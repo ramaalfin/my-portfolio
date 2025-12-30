@@ -212,7 +212,9 @@ export const ExperienceSection = () => {
             {experiences.map((exp, index) => (
               <div
                 key={index}
-                ref={(el) => (itemsRef.current[index] = el)}
+                ref={(el) => {
+                  itemsRef.current[index] = el;
+                }}
                 className={`timeline-item relative flex flex-col lg:flex-row ${
                   index % 2 === 0 ? "" : "lg:flex-row-reverse"
                 } items-center gap-8 lg:gap-0`}
