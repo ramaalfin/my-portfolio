@@ -5,10 +5,10 @@
 import { useRef } from "react";
 import Image from "next/image";
 
-import { cn } from "@/lib/utils";
 import StackingCards, {
   StackingCardItem,
 } from "@/components/fancy/blocks/stacking-cards";
+import { cn } from "@/lib/utils";
 
 const cards = [
   {
@@ -53,16 +53,13 @@ export default function StackingCardsDemo() {
 
   return (
     <div
-      className="h-[620px] bg-white overflow-auto text-white"
+      className="h-[620px] bg-white overflow-auto text-white dark:bg-black py-20 lg:py-32"
       ref={container}
     >
       <StackingCards
         totalCards={cards.length}
         scrollOptions={{ container: container }}
       >
-        <div className="relative font-calendas h-[620px] w-full z-10 text-2xl md:text-7xl font-bold uppercase flex justify-center items-center text-[#ff5941] whitespace-pre">
-          Scroll down ↓
-        </div>
         {cards.map(({ bgColor, description, image, title }, index) => {
           return (
             <StackingCardItem key={index} index={index} className="h-[620px]">

@@ -31,8 +31,8 @@ const techStacks1 = [
   },
   {
     icon: <SiNextdotjs className="w-6 h-6" />,
-    color: "text-gray-900",
-    bgColor: "bg-gray-900/10",
+    color: "text-gray-500",
+    bgColor: "bg-gray-500/10",
   },
   {
     icon: <SiTypescript className="w-6 h-6" />,
@@ -64,8 +64,8 @@ const techStacks1 = [
 const techStacks2 = [
   {
     icon: <SiExpo className="w-6 h-6" />,
-    color: "text-gray-900",
-    bgColor: "bg-gray-900/10",
+    color: "text-gray-500",
+    bgColor: "bg-gray-500/10",
   },
   {
     icon: <SiNodedotjs className="w-6 h-6" />,
@@ -183,7 +183,7 @@ export const TechStackSection2 = () => {
   return (
     <section
       id="tech"
-      className="relative py-20 lg:py-32 bg-gradient-to-b from-white to-gray-50/30 overflow-hidden"
+      className="relative py-20 lg:py-32 bg-gradient-to-b from-white to-gray-50/30 overflow-hidden dark:from-black dark:to-gray-900/30"
       ref={container}
     >
       {/* Section Header */}

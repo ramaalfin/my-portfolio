@@ -34,11 +34,10 @@ export const AboutSection = () => {
         wordClass: "text-word",
       });
 
-      // Set initial state
+      // Set initial state - tanpa warna, hanya opacity dan position
       gsap.set(text.words, {
         opacity: 0,
         y: 20,
-        color: "#999999",
       });
 
       // Create master timeline
@@ -70,14 +69,12 @@ export const AboutSection = () => {
           const wordWrapper = document.createElement("span");
           wordWrapper.className = "word-wrapper inline-block";
 
-          // Wrap each character
+          // Wrap each character dengan class untuk animasi
           const charElements = chars.map((char, charIndex) => {
             const span = document.createElement("span");
-            span.className = "char-element inline-block";
+            span.className =
+              "char-element inline-block opacity-0 translate-y-2.5 text-inherit";
             span.textContent = char;
-            span.style.opacity = "0";
-            span.style.transform = "translateY(10px)";
-            span.style.color = "#999999";
             return span;
           });
 
@@ -85,22 +82,21 @@ export const AboutSection = () => {
           charElements.forEach((span) => wordWrapper.appendChild(span));
           word.replaceWith(wordWrapper);
 
-          // Animate characters in this word
+          // Animate characters - HANYA opacity dan transform, BUKAN color
           lineTl.to(
             charElements,
             {
               opacity: 1,
               y: 0,
-              color: "#000000",
               duration: 0.3,
               stagger: 0.02,
               ease: "power2.out",
             },
             wordIndex * 0.1
-          ); // Delay between words
+          );
         });
 
-        masterTl.add(lineTl, lineIndex * 0.5); // Delay between lines
+        masterTl.add(lineTl, lineIndex * 0.5);
       });
     }
 
@@ -114,19 +110,12 @@ export const AboutSection = () => {
     <section
       id="about"
       ref={sectionRef}
-      className="relative py-32 lg:py-52 flex items-center bg-white"
+      className="relative py-32 lg:py-52 flex items-center bg-white dark:bg-black"
     >
-      {/* <Image
-        src="/assets/bg/about.svg"
-        alt="About Decor"
-        width={400}
-        height={400}
-        className="absolute bottom-0  left-0 pointer-events-none select-none w-full opacity-10 md:opacity-20"
-      /> */}
       <div className="container px-4">
         <p
           ref={revealTextRef}
-          className="reveal-type text-2xl md:text-4xl lg:text-5xl font-serif text-center leading-relaxed"
+          className="reveal-type text-2xl md:text-4xl lg:text-5xl font-serif text-center leading-relaxed text-gray-900 dark:text-gray-100"
           style={{
             wordSpacing: "0.1em",
             letterSpacing: "0.01em",

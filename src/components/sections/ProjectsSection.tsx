@@ -126,7 +126,7 @@ export const ProjectsSection = () => {
             </span>
           </RevealText>
           <RevealText delay={100}>
-            <h2 className="font-serif text-4xl md:text-5xl lg:text-6xl mt-4 mb-6">
+            <h2 className="font-serif text-4xl md:text-5xl lg:text-6xl mt-4 mb-6 dark:text-muted-foreground">
               Featured Projects
             </h2>
           </RevealText>

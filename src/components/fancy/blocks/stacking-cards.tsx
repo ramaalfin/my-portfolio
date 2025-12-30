@@ -1,101 +1,117 @@
+"use client";
+
 import {
   createContext,
   useContext,
   useRef,
   type HTMLAttributes,
   type PropsWithChildren,
-} from "react"
+} from "react";
 import {
   motion,
   useScroll,
   useTransform,
   type MotionValue,
   type UseScrollOptions,
-} from "motion/react"
-
-import { cn } from "@/lib/utils"
+} from "framer-motion";
+import { cn } from "@/lib/utils";
 
 interface StackingCardsProps
   extends PropsWithChildren,
     HTMLAttributes<HTMLDivElement> {
-  scrollOptions?: UseScrollOptions
-  scaleMultiplier?: number
-  totalCards: number
+  scrollOptions?: UseScrollOptions;
+  scaleMultiplier?: number;
+  totalCards: number;
 }
 
 interface StackingCardItemProps
   extends HTMLAttributes<HTMLDivElement>,
     PropsWithChildren {
-  index: number
-  topPosition?: string
+  index: number;
+  topPosition?: string;
 }
+
+const StackingCardsContext = createContext<{
+  progress: MotionValue<number>;
+  scaleMultiplier?: number;
+  totalCards?: number;
+} | null>(null);
+
+export const useStackingCardsContext = () => {
+  const context = useContext(StackingCardsContext);
+  if (!context)
+    throw new Error("StackingCardItem must be used within StackingCards");
+  return context;
+};
 
 export default function StackingCards({
   children,
   className,
   scrollOptions,
-  scaleMultiplier,
+  scaleMultiplier = 0.03,
   totalCards,
   ...props
 }: StackingCardsProps) {
-  const targetRef = useRef<HTMLDivElement>(null)
+  const targetRef = useRef<HTMLDivElement>(null);
+
   const { scrollYProgress } = useScroll({
     offset: ["start start", "end end"],
     ...scrollOptions,
     target: targetRef,
-  })
+  });
 
   return (
     <StackingCardsContext.Provider
       value={{ progress: scrollYProgress, scaleMultiplier, totalCards }}
     >
-      <div className={cn(className)} ref={targetRef} {...props}>
+      <div className={cn("relative", className)} ref={targetRef} {...props}>
         {children}
       </div>
     </StackingCardsContext.Provider>
-  )
+  );
 }
 
-const StackingCardItem = ({
+export function StackingCardItem({
   index,
   topPosition,
   className,
   children,
   ...props
-}: StackingCardItemProps) => {
+}: StackingCardItemProps) {
   const {
     progress,
-    scaleMultiplier,
-    totalCards = 0,
-  } = useStackingCardsContext() // Get from Context
-  const scaleTo = 1 - (totalCards - index) * (scaleMultiplier ?? 0.03)
-  const rangeScale = [index * (1 / totalCards), 1]
-  const scale = useTransform(progress, rangeScale, [1, scaleTo])
-  const top = topPosition ?? `${5 + index * 3}%`
+    scaleMultiplier = 0.03,
+    totalCards = 1,
+  } = useStackingCardsContext();
+
+  // Calculate scale - card pertama paling besar, terakhir paling kecil
+  const scaleTo = 1 - (totalCards - 1 - index) * scaleMultiplier;
+
+  // Range untuk scroll progress
+  const startRange = index / totalCards;
+  const endRange = (index + 1) / totalCards;
+
+  const scale = useTransform(progress, [startRange, endRange], [1, scaleTo]);
+
+  // Default top position dengan increment
+  const top = topPosition ?? `${index * 5}%`;
+
+  const { onDrag, ...restProps } = props;
 
   return (
-    <div className={cn("h-full sticky top-0", className)} {...props}>
-      <motion.div
-        className={"origin-top relative h-full"}
-        style={{ top, scale }}
-      >
-        {children}
-      </motion.div>
-    </div>
-  )
+    <motion.div
+      className={cn(
+        "sticky top-0 h-screen flex items-center justify-center",
+        className
+      )}
+      style={{
+        top,
+        scale,
+        zIndex: totalCards - index, // Card pertama di atas
+      }}
+      {...restProps}
+    >
+      {children}
+    </motion.div>
+  );
 }
-
-const StackingCardsContext = createContext<{
-  progress: MotionValue<number>
-  scaleMultiplier?: number
-  totalCards?: number
-} | null>(null)
-
-export const useStackingCardsContext = () => {
-  const context = useContext(StackingCardsContext)
-  if (!context)
-    throw new Error("StackingCardItem must be used within StackingCards")
-  return context
-}
-
-export { StackingCardItem }
