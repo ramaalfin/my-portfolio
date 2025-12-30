@@ -1,8 +1,7 @@
 import { useEffect, useRef, useState } from "react";
-import { GlassCard } from "@/components/ui/GlassCard";
 import { RevealText } from "@/components/ui/AnimatedText";
 import { cn } from "@/lib/utils";
-import { ExternalLink, Github, ChevronRight, Filter } from "lucide-react";
+import { ChevronRight } from "lucide-react";
 
 const projects = [
   {

@@ -10,7 +10,6 @@ import {
   Github,
   Send,
   CheckCircle2,
-  AlertCircle,
   Loader2,
 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";

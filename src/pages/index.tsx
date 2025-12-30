@@ -2,14 +2,11 @@ import { useEffect } from "react";
 import { Navigation } from "@/components/Navigation";
 import { HeroSection } from "@/components/sections/HeroSection";
 import { AboutSection } from "@/components/sections/AboutSection";
-import { TechStackSection } from "@/components/sections/TechStackSection";
 import { ProjectsSection } from "@/components/sections/ProjectsSection";
 import { ContactSection } from "@/components/sections/ContactSection";
 import { Footer } from "@/components/Footer";
 import { ExperienceSection } from "@/components/sections/ExperienceSection";
-import { CertificateSection } from "@/components/sections/CertificateSection";
 import { TechStackSection2 } from "@/components/sections/TechStackSection2";
-import { TimelineDemo } from "@/components/sections/TimelineDemo";
 import StackingCardsDemo from "@/components/sections/StackingCardsDemo";
 
 const Index = () => {
@@ -75,7 +72,6 @@ const Index = () => {
       <HeroSection />
       <AboutSection />
       <ExperienceSection />
-      {/* <CertificateSection /> */}
       <StackingCardsDemo />
       <TechStackSection2 />
       <ProjectsSection />

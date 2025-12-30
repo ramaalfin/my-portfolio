@@ -117,6 +117,9 @@ const techStacks3 = [
         width={30}
         height={30}
         alt="zustand-icon"
+        loading="lazy"
+        priority={false}
+        quality={85}
       />
     ),
     color: "text-orange-500",
@@ -129,6 +132,9 @@ const techStacks3 = [
         width={30}
         height={30}
         alt="React-Query-icon"
+        loading="lazy"
+        priority={false}
+        quality={85}
       />
     ),
     color: "text-blue-500",

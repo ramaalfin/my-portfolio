@@ -80,6 +80,10 @@ export default function StackingCardsDemo() {
                     alt={title}
                     className="object-cover"
                     fill
+                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw" // Sizes yang tepat
+                    priority={index < 2} // Prioritize loading untuk 2 card pertama
+                    loading={index < 2 ? "eager" : "lazy"} // Lazy load untuk card selanjutnya
+                    quality={85}
                   />
                 </div>
               </div>
