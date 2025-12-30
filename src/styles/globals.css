@@ -8,7 +8,7 @@
   Colors: Earth tones - terracotta, sage green, ocean blue, warm neutrals
 */
 
-@import url('https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap");
 
 @layer base {
   :root {
@@ -72,12 +72,33 @@
     --glass-shadow: 0 8px 32px hsl(30 10% 12% / 0.08);
 
     /* Gradient Variables */
-    --gradient-primary: linear-gradient(135deg, hsl(15 60% 55%), hsl(25 85% 55%));
-    --gradient-secondary: linear-gradient(135deg, hsl(150 25% 75%), hsl(200 60% 50%));
-    --gradient-hero: linear-gradient(180deg, hsl(40 20% 98%) 0%, hsl(35 25% 92%) 100%);
-    --gradient-accent: linear-gradient(135deg, hsl(200 60% 50%), hsl(150 40% 35%));
+    --gradient-primary: linear-gradient(
+      135deg,
+      hsl(15 60% 55%),
+      hsl(25 85% 55%)
+    );
+    --gradient-secondary: linear-gradient(
+      135deg,
+      hsl(150 25% 75%),
+      hsl(200 60% 50%)
+    );
+    --gradient-hero: linear-gradient(
+      180deg,
+      hsl(40 20% 98%) 0%,
+      hsl(35 25% 92%) 100%
+    );
+    --gradient-accent: linear-gradient(
+      135deg,
+      hsl(200 60% 50%),
+      hsl(150 40% 35%)
+    );
     --gradient-warm: linear-gradient(135deg, hsl(40 30% 95%), hsl(35 25% 88%));
-    --gradient-sunset: linear-gradient(135deg, hsl(15 60% 55%), hsl(25 85% 55%), hsl(35 70% 60%));
+    --gradient-sunset: linear-gradient(
+      135deg,
+      hsl(15 60% 55%),
+      hsl(25 85% 55%),
+      hsl(35 70% 60%)
+    );
 
     /* Animation Timings */
     --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
@@ -154,12 +175,37 @@
     --glass-shadow: 0 8px 32px hsl(220 30% 5% / 0.4);
 
     /* Gradient Variables - Dark Mode */
-    --gradient-primary: linear-gradient(135deg, hsl(15 65% 60%), hsl(25 80% 60%));
-    --gradient-secondary: linear-gradient(135deg, hsl(150 20% 25%), hsl(200 55% 55%));
-    --gradient-hero: linear-gradient(180deg, hsl(220 20% 8%) 0%, hsl(220 18% 12%) 100%);
-    --gradient-accent: linear-gradient(135deg, hsl(200 55% 55%), hsl(150 35% 45%));
-    --gradient-warm: linear-gradient(135deg, hsl(220 15% 14%), hsl(220 12% 18%));
-    --gradient-sunset: linear-gradient(135deg, hsl(15 65% 60%), hsl(25 80% 60%), hsl(35 65% 55%));
+    --gradient-primary: linear-gradient(
+      135deg,
+      hsl(15 65% 60%),
+      hsl(25 80% 60%)
+    );
+    --gradient-secondary: linear-gradient(
+      135deg,
+      hsl(150 20% 25%),
+      hsl(200 55% 55%)
+    );
+    --gradient-hero: linear-gradient(
+      180deg,
+      hsl(220 20% 8%) 0%,
+      hsl(220 18% 12%) 100%
+    );
+    --gradient-accent: linear-gradient(
+      135deg,
+      hsl(200 55% 55%),
+      hsl(150 35% 45%)
+    );
+    --gradient-warm: linear-gradient(
+      135deg,
+      hsl(220 15% 14%),
+      hsl(220 12% 18%)
+    );
+    --gradient-sunset: linear-gradient(
+      135deg,
+      hsl(15 65% 60%),
+      hsl(25 80% 60%),
+      hsl(35 65% 55%)
+    );
 
     /* Sidebar - Dark */
     --sidebar-background: 240 5.9% 10%;
@@ -184,17 +230,23 @@
 
   body {
     @apply bg-background text-foreground antialiased;
-    font-family: 'Inter', system-ui, sans-serif;
+    font-family: "Inter", system-ui, sans-serif;
   }
 
   /* Typography */
-  h1, h2, h3, h4, h5, h6 {
-    font-family: 'Instrument Serif', Georgia, serif;
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-family: "Instrument Serif", Georgia, serif;
     @apply font-normal tracking-tight;
   }
 
-  code, pre {
-    font-family: 'JetBrains Mono', monospace;
+  code,
+  pre {
+    font-family: "JetBrains Mono", monospace;
   }
 
   /* Selection */
@@ -254,20 +306,26 @@
   }
 
   @keyframes gradient-shift {
-    0% { background-position: 0% 50%; }
-    50% { background-position: 100% 50%; }
-    100% { background-position: 0% 50%; }
+    0% {
+      background-position: 0% 50%;
+    }
+    50% {
+      background-position: 100% 50%;
+    }
+    100% {
+      background-position: 0% 50%;
+    }
   }
 
   /* Glow Effects */
   .glow-primary {
     box-shadow: 0 0 40px hsl(var(--primary-glow) / 0.3),
-                0 0 80px hsl(var(--primary-glow) / 0.15);
+      0 0 80px hsl(var(--primary-glow) / 0.15);
   }
 
   .glow-accent {
     box-shadow: 0 0 40px hsl(var(--accent-glow) / 0.3),
-                0 0 80px hsl(var(--accent-glow) / 0.15);
+      0 0 80px hsl(var(--accent-glow) / 0.15);
   }
 
   /* 3D Card Tilt Effect Base */
@@ -283,7 +341,8 @@
   /* Haptic Button Effect */
   .btn-haptic {
     @apply relative overflow-hidden;
-    transition: transform var(--transition-fast), box-shadow var(--transition-fast);
+    transition: transform var(--transition-fast),
+      box-shadow var(--transition-fast);
   }
 
   .btn-haptic:active {
@@ -301,7 +360,7 @@
   }
 
   .link-underline::after {
-    content: '';
+    content: "";
     @apply absolute bottom-0 left-0 w-full h-0.5 bg-primary origin-bottom-right;
     transform: scaleX(0);
     transition: transform var(--transition-base);
@@ -327,7 +386,8 @@
   .reveal-up.revealed {
     opacity: 1;
     transform: translateY(0);
-    transition: opacity var(--transition-smooth), transform var(--transition-smooth);
+    transition: opacity var(--transition-smooth),
+      transform var(--transition-smooth);
   }
 
   /* Floating Animation */
@@ -336,8 +396,13 @@
   }
 
   @keyframes float {
-    0%, 100% { transform: translateY(0px); }
-    50% { transform: translateY(-20px); }
+    0%,
+    100% {
+      transform: translateY(0px);
+    }
+    50% {
+      transform: translateY(-20px);
+    }
   }
 
   /* Pulse Glow */
@@ -346,12 +411,13 @@
   }
 
   @keyframes pulse-glow {
-    0%, 100% { 
+    0%,
+    100% {
       box-shadow: 0 0 20px hsl(var(--primary-glow) / 0.4);
     }
-    50% { 
+    50% {
       box-shadow: 0 0 40px hsl(var(--primary-glow) / 0.6),
-                  0 0 60px hsl(var(--primary-glow) / 0.3);
+        0 0 60px hsl(var(--primary-glow) / 0.3);
     }
   }
 
@@ -362,8 +428,14 @@
   }
 
   @keyframes blink {
-    0%, 50% { opacity: 1; }
-    51%, 100% { opacity: 0; }
+    0%,
+    50% {
+      opacity: 1;
+    }
+    51%,
+    100% {
+      opacity: 0;
+    }
   }
 
   /* Tech Stack Icon Hover */
@@ -380,12 +452,14 @@
   /* Project Card */
   .project-card {
     @apply glass-card-solid card-3d overflow-hidden;
-    transition: transform var(--transition-base), box-shadow var(--transition-base);
+    transition: transform var(--transition-base),
+      box-shadow var(--transition-base);
   }
 
   .project-card:hover {
     @apply glow-primary;
-    transform: perspective(1000px) rotateX(2deg) rotateY(-2deg) translateZ(15px) scale(1.02);
+    transform: perspective(1000px) rotateX(2deg) rotateY(-2deg) translateZ(15px)
+      scale(1.02);
   }
 
   /* Navigation Glass */
@@ -405,11 +479,12 @@
   }
 
   @keyframes bounce-fade {
-    0%, 100% { 
+    0%,
+    100% {
       transform: translateY(0);
       opacity: 0.6;
     }
-    50% { 
+    50% {
       transform: translateY(10px);
       opacity: 1;
     }
@@ -446,7 +521,11 @@
   /* Timeline */
   .timeline-line {
     @apply absolute left-4 top-0 bottom-0 w-0.5;
-    background: linear-gradient(to bottom, hsl(var(--primary)), hsl(var(--accent)));
+    background: linear-gradient(
+      to bottom,
+      hsl(var(--primary)),
+      hsl(var(--accent))
+    );
   }
 
   .timeline-dot {
@@ -457,7 +536,9 @@
 @layer utilities {
   /* Reduced Motion Support */
   @media (prefers-reduced-motion: reduce) {
-    *, *::before, *::after {
+    *,
+    *::before,
+    *::after {
       animation-duration: 0.01ms !important;
       animation-iteration-count: 1 !important;
       transition-duration: 0.01ms !important;
@@ -485,13 +566,14 @@
   }
 
   .gradient-border::before {
-    content: '';
+    content: "";
     position: absolute;
     inset: 0;
     padding: 1px;
     border-radius: inherit;
     background: var(--gradient-primary);
-    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask: linear-gradient(#fff 0 0) content-box,
+      linear-gradient(#fff 0 0);
     mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
     -webkit-mask-composite: xor;
     mask-composite: exclude;
