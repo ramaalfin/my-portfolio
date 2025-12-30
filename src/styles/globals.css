@@ -217,6 +217,9 @@
     --sidebar-border: 240 3.7% 15.9%;
     --sidebar-ring: 217.2 91.2% 59.8%;
   }
+  .theme {
+    --animate-grid: grid 15s linear infinite;
+  }
 }
 
 @layer base {
@@ -600,4 +603,19 @@
 .experience-card {
   transition: transform 0.3s ease, box-shadow 0.3s ease;
   backface-visibility: hidden;
+}
+
+/* 
+  ---break---
+*/
+
+@theme inline {
+  @keyframes grid {
+  0% {
+    transform: translateY(-50%);
+    }
+  100% {
+    transform: translateY(0);
+    }
+  }
 }

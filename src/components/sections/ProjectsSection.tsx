@@ -9,7 +9,8 @@ const projects = [
     title: "Fiberzone Website",
     company: "PT Varnion Teknologi Semesta",
     period: "November 2025",
-    description: "Official website for fiber internet service provider with unlimited packages without FUP, featuring fast and stable connections.",
+    description:
+      "Official website for fiber internet service provider with unlimited packages without FUP, featuring fast and stable connections.",
     highlights: [
       "Map visualization for coverage checking",
       "Order management system with payment integration",
@@ -24,7 +25,8 @@ const projects = [
     title: "Hiring Management Web App",
     company: "Personal Project",
     period: "November 2025",
-    description: "Full-stack hiring platform for recruiters to manage job vacancies and applicants with advanced features.",
+    description:
+      "Full-stack hiring platform for recruiters to manage job vacancies and applicants with advanced features.",
     highlights: [
       "Magic Link & Traditional Authentication",
       "Hand Gesture Photo Capture",
@@ -32,53 +34,29 @@ const projects = [
       "Candidate Management with resizable columns",
     ],
     tech: ["Next.js", "Express.js", "MongoDB", "Zustand", "Cloudinary"],
-    category: "Full-Stack",
+    category: "Web",
     featured: true,
-  },
-  {
-    title: "Nexus Tune Dashboard",
-    company: "PT Varnion Teknologi Semesta",
-    period: "August 2025",
-    description: "Device and coverage management system integrated with Radius for automated network provisioning.",
-    highlights: [
-      "Kanban feature with pagination",
-      "Internet package management",
-      "Filtering by city and duration",
-    ],
-    tech: ["React.js", "Tailwind CSS", "TypeScript"],
-    category: "Web",
-  },
-  {
-    title: "Nexus Ads Platform",
-    company: "PT Varnion Teknologi Semesta",
-    period: "June - July 2025",
-    description: "Centralized advertising platform with captive portal system displaying ads for free internet access.",
-    highlights: [
-      "Dashboard for advertiser management",
-      "Campaign management with targeting",
-      "Video and image ads support",
-    ],
-    tech: ["React.js", "Next.js", "Tailwind CSS"],
-    category: "Web",
   },
   {
     title: "Event Management System",
     company: "WPU Course",
     period: "August 2025",
-    description: "MERN Stack event management platform with role-based access control and Midtrans payment integration.",
+    description:
+      "MERN Stack event management platform with role-based access control and Midtrans payment integration.",
     highlights: [
       "Event, category, and banner management",
       "Transaction with invoice & barcode generation",
       "Swagger API documentation",
     ],
     tech: ["Next.js", "Express.js", "Node.js", "MongoDB"],
-    category: "Full-Stack",
+    category: "Web",
   },
   {
     title: "Asiatri Mobile App",
     company: "PT Mahardika Caraka Indonesia",
     period: "November 2024",
-    description: "Park employee management app for permits, attendance using camera/location, and daily task management.",
+    description:
+      "Park employee management app for permits, attendance using camera/location, and daily task management.",
     highlights: [
       "React Native with Expo rebuild",
       "Camera and location integration",
@@ -91,7 +69,8 @@ const projects = [
     title: "Edmois School Apps",
     company: "PT Mahardika Caraka Indonesia",
     period: "May 2024",
-    description: "Multi-school application platform (Daarennisa, Bina Qurani, Edelweiss) for parents and school staff.",
+    description:
+      "Multi-school application platform (Daarennisa, Bina Qurani, Edelweiss) for parents and school staff.",
     highlights: [
       "Push notifications with FCM",
       "Document upload and download",
@@ -102,7 +81,7 @@ const projects = [
   },
 ];
 
-const categories = ["All", "Web", "Full-Stack", "Mobile"];
+const categories = ["All", "Web", "Mobile"];
 
 export const ProjectsSection = () => {
   const sectionRef = useRef<HTMLDivElement>(null);
@@ -127,17 +106,24 @@ export const ProjectsSection = () => {
     return () => observer.disconnect();
   }, []);
 
-  const filteredProjects = activeFilter === "All"
-    ? projects
-    : projects.filter(p => p.category === activeFilter);
+  const filteredProjects =
+    activeFilter === "All"
+      ? projects
+      : projects.filter((p) => p.category === activeFilter);
 
   return (
-    <section id="projects" ref={sectionRef} className="py-24 lg:py-32 bg-cream/30">
+    <section
+      id="projects"
+      ref={sectionRef}
+      className="py-24 lg:py-32 bg-cream/30"
+    >
       <div className="container px-4 lg:px-8">
         {/* Section Header */}
         <div className="text-center mb-16">
           <RevealText>
-            <span className="text-sm font-medium text-primary uppercase tracking-widest">Portfolio</span>
+            <span className="text-sm font-medium text-primary uppercase tracking-widest">
+              Portfolio
+            </span>
           </RevealText>
           <RevealText delay={100}>
             <h2 className="font-serif text-4xl md:text-5xl lg:text-6xl mt-4 mb-6">
@@ -146,7 +132,8 @@ export const ProjectsSection = () => {
           </RevealText>
           <RevealText delay={200}>
             <p className="text-muted-foreground max-w-2xl mx-auto">
-              A selection of projects I've worked on, showcasing my expertise in web and mobile development
+              A selection of projects I've worked on, showcasing my expertise in
+              web and mobile development
             </p>
           </RevealText>
           <RevealText delay={300}>
@@ -187,7 +174,9 @@ export const ProjectsSection = () => {
               className={cn(
                 "project-card group",
                 "transition-all duration-500 ease-smooth",
-                isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8",
+                isVisible
+                  ? "opacity-100 translate-y-0"
+                  : "opacity-0 translate-y-8",
                 project.featured && "md:col-span-2 lg:col-span-1"
               )}
               style={{ transitionDelay: `${index * 100}ms` }}
@@ -221,7 +210,10 @@ export const ProjectsSection = () => {
                 {/* Highlights */}
                 <ul className="space-y-2 mb-6">
                   {project.highlights.slice(0, 3).map((highlight, i) => (
-                    <li key={i} className="flex items-start gap-2 text-sm text-muted-foreground">
+                    <li
+                      key={i}
+                      className="flex items-start gap-2 text-sm text-muted-foreground"
+                    >
                       <ChevronRight className="w-4 h-4 text-primary shrink-0 mt-0.5" />
                       <span>{highlight}</span>
                     </li>

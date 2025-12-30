@@ -3,7 +3,6 @@ import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Lenis from "lenis";
 import SplitType from "split-type";
-import Image from "next/image";
 
 export const AboutSection = () => {
   const sectionRef = useRef<HTMLDivElement>(null);
@@ -139,16 +138,6 @@ export const AboutSection = () => {
           Informatika University.
         </p>
       </div>
-
-      <style jsx global>{`
-        .word-wrapper {
-          white-space: nowrap;
-        }
-        .char-element {
-          transition: color 0.3s ease;
-          will-change: transform, opacity, color;
-        }
-      `}</style>
     </section>
   );
 };

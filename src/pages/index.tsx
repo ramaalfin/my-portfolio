@@ -8,6 +8,9 @@ import { ContactSection } from "@/components/sections/ContactSection";
 import { Footer } from "@/components/Footer";
 import { ExperienceSection } from "@/components/sections/ExperienceSection";
 import { CertificateSection } from "@/components/sections/CertificateSection";
+import { TechStackSection2 } from "@/components/sections/TechStackSection2";
+import { TimelineDemo } from "@/components/sections/TimelineDemo";
+import StackingCardsDemo from "@/components/sections/StackingCardsDemo";
 
 const Index = () => {
   useEffect(() => {
@@ -72,8 +75,10 @@ const Index = () => {
       <HeroSection />
       <AboutSection />
       <ExperienceSection />
+      <TimelineDemo />
       {/* <CertificateSection /> */}
-      <TechStackSection />
+      <StackingCardsDemo />
+      <TechStackSection2 />
       <ProjectsSection />
       <ContactSection />
       <Footer />

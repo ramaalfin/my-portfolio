@@ -23,7 +23,7 @@ export const HeroSection = () => {
     <section
       id="hero"
       ref={containerRef}
-      className="relative min-h-screen flex items-center justify-center overflow-hidden hero-gradient z-10"
+      className="relative min-h-screen flex items-center justify-center overflow-hidden  z-10"
     >
       <ParticleBackground />
 
@@ -63,7 +63,7 @@ export const HeroSection = () => {
           {/* Subtitle */}
           <div
             className={cn(
-              "transition-all duration-700 ease-smooth",
+              "transition-all duration-[5000ms] ease-smooth",
               showSubtitle
                 ? "opacity-100 translate-y-0"
                 : "opacity-0 translate-y-4"

@@ -299,6 +299,14 @@ export default {
     				'100%': {
     					transform: 'translate(0px, 0px) scale(1)'
     				}
+    			},
+    			grid: {
+    				'0%': {
+    					transform: 'translateY(-50%)'
+    				},
+    				'100%': {
+    					transform: 'translateY(0)'
+    				}
     			}
     		},
     		animation: {
@@ -322,7 +330,8 @@ export default {
     			'bounce-subtle': 'bounce-subtle 2s ease-in-out infinite',
     			wiggle: 'wiggle 2s ease-in-out infinite',
     			'spin-slow': 'spin-slow 20s linear infinite',
-    			blob: 'blob 7s infinite'
+    			blob: 'blob 7s infinite',
+    			grid: 'grid 15s linear infinite'
     		},
     		backgroundImage: {
     			'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
