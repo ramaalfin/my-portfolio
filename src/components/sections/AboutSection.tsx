@@ -59,7 +59,7 @@ export const AboutSection = () => {
       });
 
       // Animate each line with delay
-      text.lines.forEach((line, lineIndex) => {
+      text?.lines?.forEach((line, lineIndex) => {
         const wordsInLine = line.querySelectorAll(".text-word");
 
         const lineTl = gsap.timeline();
