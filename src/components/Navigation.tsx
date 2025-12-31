@@ -4,7 +4,7 @@ import { Menu, X, Sun, Moon, Globe } from "lucide-react";
 
 const navItems = [
   { label: "Home", href: "#hero" },
-  { label: "About", href: "#about" },
+  { label: "Experiences", href: "#experiences" },
   { label: "Tech Stack", href: "#tech" },
   { label: "Projects", href: "#projects" },
   { label: "Contact", href: "#contact" },
@@ -20,14 +20,15 @@ export const Navigation = () => {
   useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 50);
-      
+
       // Calculate scroll progress
-      const totalHeight = document.documentElement.scrollHeight - window.innerHeight;
+      const totalHeight =
+        document.documentElement.scrollHeight - window.innerHeight;
       const progress = (window.scrollY / totalHeight) * 100;
       setScrollProgress(progress);
 
       // Determine active section
-      const sections = navItems.map(item => item.href.substring(1));
+      const sections = navItems.map((item) => item.href.substring(1));
       for (const section of sections.reverse()) {
         const element = document.getElementById(section);
         if (element) {
@@ -71,9 +72,7 @@ export const Navigation = () => {
       <nav
         className={cn(
           "fixed top-0 left-0 right-0 z-40 transition-all duration-500",
-          isScrolled
-            ? "nav-glass py-3 shadow-glass"
-            : "bg-transparent py-6"
+          isScrolled ? "nav-glass py-3 shadow-glass" : "bg-transparent py-6"
         )}
       >
         <div className="container mx-auto px-4 lg:px-8">

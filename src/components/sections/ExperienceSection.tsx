@@ -66,7 +66,7 @@ export const ExperienceSection = () => {
 
   return (
     <section
-      id="experience"
+      id="experiences"
       ref={sectionRef}
       className="relative py-24 lg:py-32 overflow-hidden"
     >

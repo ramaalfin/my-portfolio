@@ -7,7 +7,7 @@ export const Footer = () => {
   };
 
   return (
-    <footer className="py-12 border-t border-border/50">
+    <footer className="py-8 border-t border-border/50">
       <div className="container px-4 lg:px-8">
         <div className="flex flex-col md:flex-row items-center justify-between gap-6">
           {/* Logo & Copyright */}
@@ -16,16 +16,14 @@ export const Footer = () => {
               <span className="gradient-text">R</span>
               <span className="text-foreground">ama</span>
             </a>
-            <p className="text-sm text-muted-foreground">
-              © {new Date().getFullYear()} Rama Alfin Baehaqi. All rights reserved.
-            </p>
           </div>
 
           {/* Built with */}
           <div className="flex items-center gap-1 text-sm text-muted-foreground">
-            <span>Built with</span>
-            <Heart className="w-4 h-4 text-primary fill-primary animate-pulse" />
-            <span>using React & Tailwind</span>
+            <p className="text-sm text-muted-foreground">
+              © {new Date().getFullYear()} Rama Alfin Baehaqi. All rights
+              reserved.
+            </p>
           </div>
 
           {/* Back to Top */}

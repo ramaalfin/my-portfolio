@@ -72,7 +72,7 @@ const Index = () => {
       <HeroSection />
       <AboutSection />
       <ExperienceSection />
-      <StackingCardsDemo />
+      {/* <StackingCardsDemo /> */}
       <TechStackSection2 />
       <ProjectsSection />
       <ContactSection />
