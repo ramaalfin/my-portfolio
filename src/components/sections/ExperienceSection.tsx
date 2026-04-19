@@ -1,47 +1,9 @@
 import { useEffect, useRef, useState } from "react";
 import { RevealText } from "../ui/AnimatedText";
-import { MapPin } from "lucide-react";
+import { MapPin, ChevronRight } from "lucide-react";
 
 import { useScroll, useTransform, motion } from "framer-motion";
-
-const experiences = [
-  {
-    title: "Front-End Developer",
-    company: "PT Varnion Teknologi Semesta",
-    period: "June 2025 - Present",
-    location: "Jakarta, Indonesia",
-    current: true,
-    description:
-      "Building responsive UIs with React.js and Next.js, optimizing performance, and integrating APIs.",
-    technologies: [
-      "React.js",
-      "Next.js",
-      "TypeScript",
-      "Tailwind CSS",
-      "GraphQL",
-    ],
-  },
-  {
-    title: "Front-End Developer",
-    company: "PT Mahardika Caraka Indonesia",
-    period: "Feb 2024 - Jun 2025",
-    location: "Remote",
-    current: false,
-    description:
-      "Developed features, sliced UI from Figma, and rebuilt mobile apps with React Native.",
-    technologies: ["React Native", "Figma", "Redux", "Firebase", "Jest"],
-  },
-  {
-    title: "Full-Stack Developer Intern",
-    company: "PT INDI Teknokreasi Internasional",
-    period: "Aug 2023 - Dec 2023",
-    location: "Jakarta, Indonesia",
-    current: false,
-    description:
-      "Developed full-stack applications using React.js and Node.js, implemented RESTful APIs, and collaborated with team members on project development.",
-    technologies: ["Laravel", "Next.js", "MySQL"],
-  },
-];
+import { experiences } from "@/data/experiences";
 
 export const ExperienceSection = () => {
   const sectionRef = useRef<HTMLDivElement>(null);
@@ -121,6 +83,27 @@ export const ExperienceSection = () => {
                     <p className="text-sm text-neutral-600 dark:text-neutral-400 mb-4">
                       {item.description}
                     </p>
+
+                    {/* Key Achievements */}
+                    {item.achievements && item.achievements.length > 0 && (
+                      <div className="mb-4">
+                        <h5 className="text-sm font-semibold mb-2 text-neutral-700 dark:text-neutral-300">
+                          Key Achievements:
+                        </h5>
+                        <ul className="space-y-2">
+                          {item.achievements.slice(0, 4).map((achievement, i) => (
+                            <li
+                              key={i}
+                              className="flex items-start gap-2 text-sm text-neutral-600 dark:text-neutral-400"
+                            >
+                              <ChevronRight className="w-4 h-4 text-primary shrink-0 mt-0.5" />
+                              <span>{achievement}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    )}
+
                     <div className="flex flex-wrap gap-2 mb-4">
                       {item.technologies.map((tech, techIndex) => (
                         <span

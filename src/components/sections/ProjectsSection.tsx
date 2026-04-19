@@ -1,84 +1,9 @@
 import { useEffect, useRef, useState } from "react";
 import { RevealText } from "@/components/ui/AnimatedText";
 import { cn } from "@/lib/utils";
-import { ChevronRight } from "lucide-react";
-
-const projects = [
-  {
-    title: "Fiberzone Website",
-    company: "PT Varnion Teknologi Semesta",
-    period: "November 2025",
-    description:
-      "Official website for fiber internet service provider with unlimited packages without FUP, featuring fast and stable connections.",
-    highlights: [
-      "Map visualization for coverage checking",
-      "Order management system with payment integration",
-      "OCR feature for NPWP and KTP using tesseract.js",
-      "SSR implementation for optimal performance",
-    ],
-    tech: ["Next.js", "Tailwind CSS", "Zustand", "TypeScript"],
-    category: "Web",
-    featured: true,
-  },
-  {
-    title: "Hiring Management Web App",
-    company: "Personal Project",
-    period: "November 2025",
-    description:
-      "Full-stack hiring platform for recruiters to manage job vacancies and applicants with advanced features.",
-    highlights: [
-      "Magic Link & Traditional Authentication",
-      "Hand Gesture Photo Capture",
-      "Dynamic Application Forms",
-      "Candidate Management with resizable columns",
-    ],
-    tech: ["Next.js", "Express.js", "MongoDB", "Zustand", "Cloudinary"],
-    category: "Web",
-    featured: true,
-  },
-  {
-    title: "Event Management System",
-    company: "WPU Course",
-    period: "August 2025",
-    description:
-      "MERN Stack event management platform with role-based access control and Midtrans payment integration.",
-    highlights: [
-      "Event, category, and banner management",
-      "Transaction with invoice & barcode generation",
-      "Swagger API documentation",
-    ],
-    tech: ["Next.js", "Express.js", "Node.js", "MongoDB"],
-    category: "Web",
-  },
-  {
-    title: "Asiatri Mobile App",
-    company: "PT Mahardika Caraka Indonesia",
-    period: "November 2024",
-    description:
-      "Park employee management app for permits, attendance using camera/location, and daily task management.",
-    highlights: [
-      "React Native with Expo rebuild",
-      "Camera and location integration",
-      "Async storage authentication",
-    ],
-    tech: ["React Native", "Expo", "TypeScript"],
-    category: "Mobile",
-  },
-  {
-    title: "Edmois School Apps",
-    company: "PT Mahardika Caraka Indonesia",
-    period: "May 2024",
-    description:
-      "Multi-school application platform (Daarennisa, Bina Qurani, Edelweiss) for parents and school staff.",
-    highlights: [
-      "Push notifications with FCM",
-      "Document upload and download",
-      "Camera integration",
-    ],
-    tech: ["React Native", "Expo", "Firebase"],
-    category: "Mobile",
-  },
-];
+import { ChevronRight, ArrowRight } from "lucide-react";
+import Link from "next/link";
+import { projects } from "@/data/projects";
 
 const categories = ["All", "Web", "Mobile"];
 
@@ -166,12 +91,13 @@ export const ProjectsSection = () => {
         {/* Projects Grid */}
         <div className="grid md:grid-cols-2 gap-6 lg:gap-8">
           {filteredProjects.map((project, index) => (
-            <div
-              key={project.title}
+            <Link
+              key={project.id}
+              href={`/projects/${project.id}`}
               onMouseEnter={() => setHoveredProject(project.title)}
               onMouseLeave={() => setHoveredProject(null)}
               className={cn(
-                "project-card group",
+                "project-card group block",
                 "transition-all duration-500 ease-smooth",
                 isVisible
                   ? "opacity-100 translate-y-0"
@@ -180,7 +106,7 @@ export const ProjectsSection = () => {
               )}
               style={{ transitionDelay: `${index * 100}ms` }}
             >
-              <div className="p-6 lg:p-8">
+              <div className="p-6 lg:p-8 h-full flex flex-col">
                 {/* Header */}
                 <div className="flex items-start justify-between gap-4 mb-4">
                   <div>
@@ -220,8 +146,8 @@ export const ProjectsSection = () => {
                 </ul>
 
                 {/* Tech Stack */}
-                <div className="flex flex-wrap gap-2">
-                  {project.tech.map((tech) => (
+                <div className="flex flex-wrap gap-2 mb-4">
+                  {project.tech.slice(0, 6).map((tech) => (
                     <span
                       key={tech}
                       className="px-3 py-1 text-xs font-medium rounded-full bg-muted text-muted-foreground"
@@ -229,9 +155,22 @@ export const ProjectsSection = () => {
                       {tech}
                     </span>
                   ))}
+                  {project.tech.length > 6 && (
+                    <span className="px-3 py-1 text-xs font-medium rounded-full bg-muted text-muted-foreground">
+                      +{project.tech.length - 6} more
+                    </span>
+                  )}
+                </div>
+
+                {/* View Details Link */}
+                <div className="mt-auto pt-4 border-t border-border">
+                  <span className="inline-flex items-center gap-2 text-sm font-medium text-primary group-hover:gap-3 transition-all">
+                    View Details
+                    <ArrowRight className="w-4 h-4" />
+                  </span>
                 </div>
               </div>
-            </div>
+            </Link>
           ))}
         </div>
       </div>

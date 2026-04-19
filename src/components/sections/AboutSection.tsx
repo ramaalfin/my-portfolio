@@ -121,10 +121,13 @@ export const AboutSection = () => {
             letterSpacing: "0.01em",
           }}
         >
-          Front-End Developer with 2 years of experience in designing,
-          developing, and testing modern web and mobile applications. I hold a
-          Bachelor's degree in Information Technology from Bina Sarana
-          Informatika University.
+          Frontend Engineer with 2+ years of experience delivering
+          production-grade web and mobile applications at scale. Specialized in
+          React.js, Next.js, and TypeScript, with a strong focus on rendering
+          strategies, Core Web Vitals optimization, and scalable component
+          architecture. Proven ability to improve Lighthouse scores to 95+,
+          reduce load times by ~35%, and ship end-to-end features including
+          real-time systems and fullstack integrations.
         </p>
       </div>
     </section>

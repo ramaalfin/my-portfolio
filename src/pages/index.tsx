@@ -12,20 +12,20 @@ import StackingCardsDemo from "@/components/sections/StackingCardsDemo";
 const Index = () => {
   useEffect(() => {
     // Update page title and meta tags
-    document.title = "Rama Alfin Baehaqi | Front-End Developer Portfolio";
+    document.title = "Rama Alfin Baehaqi | Frontend Engineer Portfolio";
 
     // Update meta description
     const metaDescription = document.querySelector('meta[name="description"]');
     if (metaDescription) {
       metaDescription.setAttribute(
         "content",
-        "Front-End Developer with 2+ years of experience in React.js, Next.js, and React Native. Building high-performance digital experiences."
+        "Frontend Engineer with 2+ years of experience delivering production-grade web and mobile applications. Specialized in React.js, Next.js, and TypeScript with focus on performance optimization and scalable architecture."
       );
     } else {
       const meta = document.createElement("meta");
       meta.name = "description";
       meta.content =
-        "Front-End Developer with 2+ years of experience in React.js, Next.js, and React Native. Building high-performance digital experiences.";
+        "Frontend Engineer with 2+ years of experience delivering production-grade web and mobile applications. Specialized in React.js, Next.js, and TypeScript with focus on performance optimization and scalable architecture.";
       document.head.appendChild(meta);
     }
 
@@ -34,7 +34,7 @@ const Index = () => {
       "@context": "https://schema.org",
       "@type": "Person",
       name: "Rama Alfin Baehaqi",
-      jobTitle: "Front-End Developer",
+      jobTitle: "Frontend Engineer",
       url: window.location.href,
       sameAs: [
         "https://linkedin.com/in/rama-alfin-baehaqi",
@@ -46,6 +46,8 @@ const Index = () => {
         "React Native",
         "TypeScript",
         "Tailwind CSS",
+        "Performance Optimization",
+        "Core Web Vitals",
       ],
       address: {
         "@type": "PostalAddress",

@@ -70,14 +70,14 @@ export const HeroSection = () => {
             )}
           >
             <p className="text-xl md:text-2xl lg:text-3xl text-muted-foreground mb-4">
-              <GradientText animate>Front-End Developer</GradientText>
+              <GradientText animate>Frontend Engineer</GradientText>
             </p>
-            {/* <p className="text-base md:text-lg text-muted-foreground/80 max-w-2xl mx-auto mb-8 font-light leading-relaxed">
-              Transforming ideas into high-performance digital experiences with
+            <p className="text-base md:text-lg text-muted-foreground/80 max-w-2xl mx-auto mb-8 font-light leading-relaxed">
+              Delivering production-grade web and mobile applications with
               <span className="text-primary"> React.js</span>,
               <span className="text-accent"> Next.js</span>, and
-              <span className="text-forest"> React Native</span>
-            </p> */}
+              <span className="text-forest"> TypeScript</span>
+            </p>
           </div>
 
           {/* Location */}
