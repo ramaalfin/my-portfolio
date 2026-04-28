@@ -1,21 +1,104 @@
-import { useEffect, useRef, useState } from "react";
-import { Typewriter, GradientText } from "@/components/ui/AnimatedText";
+import { useEffect, useRef } from "react";
+import { GradientText } from "@/components/ui/AnimatedText";
 import { ScrollIndicator } from "@/components/ScrollIndicator";
 import { ParticleBackground } from "@/components/ParticleBackground";
-import { MapPin, Mail, Linkedin, Github, FileText } from "lucide-react";
-import { cn } from "@/lib/utils";
+import { MapPin, Mail, Linkedin, Github } from "lucide-react";
+import { gsap } from "gsap";
+import SplitType from "split-type";
 
 export const HeroSection = () => {
-  const [showSubtitle, setShowSubtitle] = useState(false);
-  const [showCTA, setShowCTA] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
+  const greetingRef = useRef<HTMLDivElement>(null);
+  const headingRef = useRef<HTMLHeadingElement>(null);
+  const subtitleRef = useRef<HTMLDivElement>(null);
+  const locationRef = useRef<HTMLDivElement>(null);
+  const ctaRef = useRef<HTMLDivElement>(null);
+  const socialRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const timer1 = setTimeout(() => setShowSubtitle(true), 1500);
-    const timer2 = setTimeout(() => setShowCTA(true), 2500);
+    if (!headingRef.current) return;
+
+    // Split heading text into characters
+    const split = new SplitType(headingRef.current, { types: "chars" });
+
+    // Create master timeline
+    const tl = gsap.timeline({ delay: 0.3 });
+
+    // Animate greeting badge
+    tl.from(greetingRef.current, {
+      opacity: 0,
+      y: -20,
+      duration: 0.6,
+      ease: "power2.out",
+    });
+
+    // Animate heading characters with 3D rotation
+    tl.from(
+      split.chars,
+      {
+        opacity: 0,
+        y: 60,
+        rotateX: -90,
+        stagger: 0.03,
+        duration: 0.6,
+        ease: "back.out(1.7)",
+      },
+      "-=0.3"
+    );
+
+    // Animate subtitle
+    tl.from(
+      subtitleRef.current,
+      {
+        opacity: 0,
+        y: 30,
+        duration: 0.8,
+        ease: "power3.out",
+      },
+      "-=0.3"
+    );
+
+    // Animate location
+    tl.from(
+      locationRef.current,
+      {
+        opacity: 0,
+        y: 20,
+        duration: 0.6,
+        ease: "power2.out",
+      },
+      "-=0.4"
+    );
+
+    // Animate CTA buttons
+    tl.from(
+      ctaRef.current,
+      {
+        opacity: 0,
+        y: 20,
+        duration: 0.6,
+        ease: "power2.out",
+      },
+      "-=0.4"
+    );
+
+    // Animate social links
+    tl.from(
+      socialRef.current?.children || [],
+      {
+        opacity: 0,
+        scale: 0.8,
+        stagger: 0.1,
+        duration: 0.5,
+        ease: "back.out(1.7)",
+      },
+      "-=0.3"
+    );
+
+    // Cleanup
     return () => {
-      clearTimeout(timer1);
-      clearTimeout(timer2);
+      split.revert();
+      tl.kill();
     };
   }, []);
 
@@ -43,32 +126,26 @@ export const HeroSection = () => {
       <div className="container relative z-10 px-4 lg:px-8 text-center">
         <div className="max-w-4xl mx-auto">
           {/* Greeting */}
-          <div
-            className="mb-6 opacity-0 animate-fade-in"
-            style={{ animationDelay: "0.2s" }}
-          >
+          <div ref={greetingRef} className="mb-6">
             <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full glass-card text-sm font-medium text-muted-foreground">
               <span className="w-2 h-2 rounded-full bg-forest animate-pulse" />
               Available for new opportunities
             </span>
           </div>
 
-          {/* Main Heading with Typewriter */}
-          <h1 className="font-serif text-5xl md:text-7xl lg:text-8xl tracking-tight mb-6">
+          {/* Main Heading — SplitType + GSAP per char */}
+          <h1
+            ref={headingRef}
+            className="font-display text-5xl md:text-7xl lg:text-8xl tracking-tight mb-6 [perspective:800px]"
+            style={{ transformStyle: "preserve-3d" }}
+          >
             <span className="block text-foreground">
-              <Typewriter text="Rama Alfin Baehaqi" speed={80} />
+              Rama Alfin Baehaqi
             </span>
           </h1>
 
           {/* Subtitle */}
-          <div
-            className={cn(
-              "transition-all duration-[5000ms] ease-smooth",
-              showSubtitle
-                ? "opacity-100 translate-y-0"
-                : "opacity-0 translate-y-4"
-            )}
-          >
+          <div ref={subtitleRef}>
             <p className="text-xl md:text-2xl lg:text-3xl text-muted-foreground mb-4">
               <GradientText animate>Frontend Engineer</GradientText>
             </p>
@@ -81,15 +158,7 @@ export const HeroSection = () => {
           </div>
 
           {/* Location */}
-          <div
-            className={cn(
-              "flex items-center justify-center gap-4 mb-8 transition-all duration-700 ease-smooth",
-              showSubtitle
-                ? "opacity-100 translate-y-0"
-                : "opacity-0 translate-y-4"
-            )}
-            style={{ transitionDelay: "200ms" }}
-          >
+          <div ref={locationRef} className="flex items-center justify-center gap-4 mb-8">
             <span className="flex items-center gap-2 text-muted-foreground">
               <MapPin className="w-4 h-4" />
               Bogor, Indonesia
@@ -98,10 +167,8 @@ export const HeroSection = () => {
 
           {/* CTA Buttons */}
           <div
-            className={cn(
-              "flex flex-col sm:flex-row items-center justify-center gap-4 transition-all duration-700 ease-smooth",
-              showCTA ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
-            )}
+            ref={ctaRef}
+            className="flex flex-col sm:flex-row items-center justify-center gap-4"
           >
             <a
               href="#projects"
@@ -148,11 +215,8 @@ export const HeroSection = () => {
 
           {/* Social Links */}
           <div
-            className={cn(
-              "flex items-center justify-center gap-4 mt-12 mb-20 transition-all duration-700 ease-smooth",
-              showCTA ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
-            )}
-            style={{ transitionDelay: "200ms" }}
+            ref={socialRef}
+            className="flex items-center justify-center gap-4 mt-12 mb-20"
           >
             {[
               {

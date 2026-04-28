@@ -19,7 +19,7 @@ interface ParticleBackgroundProps {
 
 export const ParticleBackground = ({
   className,
-  particleCount = 60,
+  particleCount = 100,
   interactive = true,
 }: ParticleBackgroundProps) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);

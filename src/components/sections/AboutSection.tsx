@@ -1,7 +1,6 @@
 import { useEffect, useRef } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import Lenis from "lenis";
 import SplitType from "split-type";
 
 export const AboutSection = () => {
@@ -12,19 +11,7 @@ export const AboutSection = () => {
   useEffect(() => {
     if (typeof window === "undefined" || hasAnimatedRef.current) return;
 
-    gsap.registerPlugin(ScrollTrigger);
-
-    // Setup Lenis
-    const lenis = new Lenis({
-      duration: 1.2,
-      smoothWheel: true,
-    });
-
-    function raf(time: number) {
-      lenis.raf(time);
-      requestAnimationFrame(raf);
-    }
-    requestAnimationFrame(raf);
+    // ScrollTrigger sudah di-register di _app.tsx, tidak perlu register ulang
 
     // Animasi dengan delay berdasarkan posisi kata
     if (revealTextRef.current) {
@@ -70,7 +57,7 @@ export const AboutSection = () => {
           wordWrapper.className = "word-wrapper inline-block";
 
           // Wrap each character dengan class untuk animasi
-          const charElements = chars.map((char, charIndex) => {
+          const charElements = chars.map((char) => {
             const span = document.createElement("span");
             span.className =
               "char-element inline-block opacity-0 translate-y-2.5 text-inherit";
@@ -101,8 +88,9 @@ export const AboutSection = () => {
     }
 
     return () => {
+      // Hanya kill ScrollTrigger yang dibuat di section ini
       ScrollTrigger.getAll().forEach((trigger) => trigger.kill());
-      lenis.destroy();
+      // Lenis di-destroy di _app.tsx, tidak perlu di sini
     };
   }, []);
 
@@ -115,7 +103,7 @@ export const AboutSection = () => {
       <div className="container px-4">
         <p
           ref={revealTextRef}
-          className="reveal-type text-2xl md:text-4xl lg:text-5xl font-serif text-center leading-relaxed text-gray-900 dark:text-gray-100"
+          className="reveal-type text-2xl md:text-4xl lg:text-5xl font-display text-center leading-relaxed text-gray-900 dark:text-gray-100"
           style={{
             wordSpacing: "0.1em",
             letterSpacing: "0.01em",

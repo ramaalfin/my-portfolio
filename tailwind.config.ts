@@ -14,13 +14,16 @@ export default {
 		},
 		extend: {
 			fontFamily: {
+				display: [
+					'Clash Display',
+					'sans-serif'
+				],
 				serif: [
-					'Instrument Serif',
-					'Georgia',
-					'serif'
+					'Clash Display',
+					'sans-serif'
 				],
 				sans: [
-					'Inter',
+					'Cabinet Grotesk',
 					'system-ui',
 					'sans-serif'
 				],

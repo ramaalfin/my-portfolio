@@ -4,14 +4,20 @@ import { cn } from "@/lib/utils";
 import { ChevronRight, ArrowRight } from "lucide-react";
 import Link from "next/link";
 import { projects } from "@/data/projects";
+import { gsap } from "gsap";
+import { Flip } from "gsap/Flip";
+import { flushSync } from "react-dom";
+
+// Register Flip plugin sekali di module level
+gsap.registerPlugin(Flip);
 
 const categories = ["All", "Web", "Mobile"];
 
 export const ProjectsSection = () => {
   const sectionRef = useRef<HTMLDivElement>(null);
+  const gridRef = useRef<HTMLDivElement>(null);
   const [isVisible, setIsVisible] = useState(false);
   const [activeFilter, setActiveFilter] = useState("All");
-  const [hoveredProject, setHoveredProject] = useState<string | null>(null);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -29,6 +35,64 @@ export const ProjectsSection = () => {
 
     return () => observer.disconnect();
   }, []);
+
+  const handleFilter = (category: string) => {
+    if (category === activeFilter || !gridRef.current) return;
+
+    const grid = gridRef.current;
+    const cards = grid.querySelectorAll<HTMLElement>(".project-card");
+
+    // 1. Capture posisi semua card SEBELUM React re-render
+    const state = Flip.getState(cards);
+
+    // 2. Tambah class flip-animating — nonaktifkan CSS transform transition
+    //    agar tidak konflik dengan GSAP selama animasi berlangsung
+    cards.forEach((card) => card.classList.add("flip-animating"));
+
+    // 3. Lock tinggi grid sebelum flushSync agar container tidak collapse
+    //    saat card yang keluar di-set absolute oleh Flip
+    grid.style.minHeight = `${grid.offsetHeight}px`;
+
+    // 4. flushSync — paksa React update DOM secara synchronous
+    //    agar Flip bisa membandingkan posisi lama vs baru dalam satu frame
+    flushSync(() => {
+      setActiveFilter(category);
+    });
+
+    // 5. Animasikan dari posisi lama ke posisi baru
+    Flip.from(state, {
+      duration: 0.6,
+      ease: "power2.inOut",
+      stagger: 0.05,
+      absolute: true,
+      onEnter: (elements) => {
+        // Card baru yang muncul — fade + scale in
+        gsap.fromTo(
+          elements,
+          { opacity: 0, scale: 0.85 },
+          { opacity: 1, scale: 1, duration: 0.6, ease: "back.out(1.4)" }
+        );
+      },
+      onLeave: (elements) => {
+        // Card yang hilang — fade + scale out
+        gsap.to(elements, {
+          opacity: 0,
+          scale: 0.85,
+          duration: 0.3,
+          ease: "power2.in",
+        });
+      },
+      onComplete: () => {
+        // 6. Reset setelah animasi selesai:
+        //    - hapus flip-animating agar hover transform kembali smooth
+        //    - reset minHeight agar grid menyesuaikan tinggi natural
+        grid.querySelectorAll<HTMLElement>(".project-card").forEach((card) =>
+          card.classList.remove("flip-animating")
+        );
+        grid.style.minHeight = "";
+      },
+    });
+  };
 
   const filteredProjects =
     activeFilter === "All"
@@ -75,7 +139,7 @@ export const ProjectsSection = () => {
           {categories.map((category) => (
             <button
               key={category}
-              onClick={() => setActiveFilter(category)}
+              onClick={() => handleFilter(category)}
               className={cn(
                 "px-5 py-2.5 rounded-full text-sm font-medium transition-all duration-300",
                 activeFilter === category
@@ -89,22 +153,29 @@ export const ProjectsSection = () => {
         </div>
 
         {/* Projects Grid */}
-        <div className="grid md:grid-cols-2 gap-6 lg:gap-8">
+        <div ref={gridRef} className="grid md:grid-cols-2 gap-6 lg:gap-8">
           {filteredProjects.map((project, index) => (
             <Link
               key={project.id}
               href={`/projects/${project.id}`}
-              onMouseEnter={() => setHoveredProject(project.title)}
-              onMouseLeave={() => setHoveredProject(null)}
               className={cn(
                 "project-card group block",
-                "transition-all duration-500 ease-smooth",
-                isVisible
-                  ? "opacity-100 translate-y-0"
-                  : "opacity-0 translate-y-8",
+                !isVisible && "opacity-0 translate-y-8",
                 project.featured && "md:col-span-2 lg:col-span-1"
               )}
-              style={{ transitionDelay: `${index * 100}ms` }}
+              style={
+                !isVisible
+                  ? {
+                      transition: "opacity 0.5s ease, transform 0.5s ease",
+                      transitionDelay: `${index * 100}ms`,
+                    }
+                  : {
+                      // Matikan hanya opacity & transform agar tidak konflik GSAP Flip
+                      // tapi biarkan box-shadow, color, gap, dll tetap smooth saat hover
+                      transition:
+                        "box-shadow var(--transition-base), color var(--transition-base), gap var(--transition-base)",
+                    }
+              }
             >
               <div className="p-6 lg:p-8 h-full flex flex-col">
                 {/* Header */}
