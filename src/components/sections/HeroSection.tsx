@@ -136,7 +136,7 @@ export const HeroSection = () => {
           {/* Main Heading — SplitType + GSAP per char */}
           <h1
             ref={headingRef}
-            className="font-display text-5xl md:text-7xl lg:text-8xl tracking-tight mb-6 [perspective:800px]"
+            className="font-display text-4xl md:text-7xl lg:text-8xl tracking-tight mb-6 [perspective:800px]"
             style={{ transformStyle: "preserve-3d" }}
           >
             <span className="block text-foreground">
