@@ -5,56 +5,77 @@ import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { experiences } from "@/data/experiences";
 
-// Icon mapping per experience
+gsap.registerPlugin(ScrollTrigger);
+
 const experienceIcons = [Briefcase, Code, Rocket];
 
 export const ExperienceSectionHorizontal = () => {
-  const sectionRef = useRef<HTMLDivElement>(null);
-  const containerRef = useRef<HTMLDivElement>(null);
-  const horizontalRef = useRef<HTMLDivElement>(null);
+  const stackRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    if (!horizontalRef.current || !containerRef.current) return;
+    const ctx = gsap.context(() => {
+      const cards = gsap.utils.toArray<HTMLElement>(".exp-card");
+      if (!cards.length || !stackRef.current) return;
 
-    const horizontal = horizontalRef.current;
-    const container = containerRef.current;
+      const totalCards = cards.length;
 
-    // Calculate total scroll width
-    const scrollWidth = horizontal.scrollWidth - window.innerWidth;
+      // Semua card di-stack di posisi yang sama (absolute).
+      // Card selain pertama dimulai dari bawah (yPercent: 110).
+      // z-index naik agar card lebih baru selalu di atas.
+      cards.forEach((card, i) => {
+        gsap.set(card, { zIndex: i + 1 });
+        if (i > 0) gsap.set(card, { yPercent: 110 });
+      });
 
-    // Set initial state: cards visible dari awal
-    const cards = horizontal.querySelectorAll(".experience-slide");
-    gsap.set(cards, { opacity: 1, scale: 1 });
+      // ScrollTrigger mempin container & menjalankan timeline saat scroll.
+      const tl = gsap.timeline({
+        scrollTrigger: {
+          trigger: stackRef.current,
+          start: "top top",
+          end: `+=${(totalCards - 1) * 700}`,
+          scrub: 1.2,
+          pin: true,
+          pinSpacing: true,
+          anticipatePin: 1,
+        },
+      });
 
-    // Create horizontal scroll animation
-    const tl = gsap.timeline({
-      scrollTrigger: {
-        trigger: container,
-        start: "top top",
-        end: () => `+=${scrollWidth}`,
-        scrub: 1,
-        pin: true,
-        anticipatePin: 1,
-        invalidateOnRefresh: true,
-      },
-    });
+      // Setiap card slide naik dari bawah, sebelumnya sedikit scale-down
+      cards.forEach((card, i) => {
+        if (i === 0) return;
 
-    // Animate horizontal movement
-    tl.to(horizontal, {
-      x: -scrollWidth,
-      ease: "none",
-    });
+        // Scale down + dorong sedikit ke atas card sebelumnya
+        tl.to(
+          cards[i - 1],
+          {
+            scale: 0.94,
+            yPercent: -4,
+            duration: 1,
+            ease: "power2.inOut",
+          },
+          `card-${i}`,
+        );
 
-    return () => {
-      ScrollTrigger.getAll().forEach((trigger) => trigger.kill());
-    };
+        // Slide masuk card baru dari bawah
+        tl.to(
+          card,
+          {
+            yPercent: 0,
+            duration: 1,
+            ease: "power2.inOut",
+          },
+          `card-${i}`,
+        );
+      });
+    }, stackRef);
+
+    return () => ctx.revert();
   }, []);
 
   return (
     <section
       id="experiences"
-      ref={sectionRef}
-      className="relative bg-gradient-to-b from-background via-cream/20 to-background overflow-hidden"
+      className="relative bg-gradient-to-b from-background via-cream/20 to-background"
     >
       {/* Section Header */}
       <div className="container px-4 lg:px-8 pt-24">
@@ -71,7 +92,7 @@ export const ExperienceSectionHorizontal = () => {
           </RevealText>
           <RevealText delay={200}>
             <p className="text-muted-foreground max-w-2xl mx-auto">
-              Scroll horizontally to explore my career timeline
+              Scroll to explore my career timeline
             </p>
           </RevealText>
           <RevealText delay={300}>
@@ -80,105 +101,111 @@ export const ExperienceSectionHorizontal = () => {
         </div>
       </div>
 
-      {/* Horizontal Scroll Container */}
-      <div ref={containerRef} className="relative h-screen">
-        <div
-          ref={horizontalRef}
-          className="absolute top-0 left-0 h-full flex items-center gap-8 px-4 lg:px-8"
-        >
-          {experiences.map((item, index) => {
-            const Icon = experienceIcons[index] || Briefcase;
+      {/* Stack container — di-pin oleh GSAP ScrollTrigger */}
+      <div ref={stackRef} className="relative h-screen">
+        {/* Cards area: flex center, semua card tumpuk via absolute */}
+        <div className="absolute inset-0 flex items-center justify-center px-4 lg:px-8 py-12">
+          <div className="relative w-full max-w-5xl h-[78vh]">
+            {experiences.map((item, index) => {
+              const Icon = experienceIcons[index] || Briefcase;
 
-            return (
-              <div
-                key={index}
-                className="experience-slide flex-shrink-0 w-[90vw] md:w-[70vw] lg:w-[50vw] h-[80vh] flex flex-col"
-              >
-                {/* Chapter Indicator */}
-                <div className="flex items-center gap-3 mb-6">
-                  <div className="flex items-center justify-center w-12 h-12 rounded-full bg-primary/10">
-                    <Icon className="w-6 h-6 text-primary" />
+              return (
+                <div
+                  key={index}
+                  className="exp-card absolute inset-0 w-full h-full overflow-hidden rounded-2xl border border-border bg-card shadow-2xl"
+                >
+                  {/* Card Top Bar */}
+                  <div className="flex flex-wrap items-center justify-between gap-4 px-6 pt-6 pb-4 border-b border-border">
+                    <div className="flex items-center gap-3">
+                      <div className="flex items-center justify-center w-10 h-10 rounded-full bg-primary/10 shrink-0">
+                        <Icon className="w-5 h-5 text-primary" />
+                      </div>
+                      <div>
+                        <p className="text-xs font-medium text-muted-foreground uppercase tracking-wider">
+                          Chapter {String(index + 1).padStart(2, "0")}
+                        </p>
+                        <h3 className="text-lg font-bold text-foreground leading-tight">
+                          {item.period}
+                        </h3>
+                      </div>
+                    </div>
+
+                    {item.current && (
+                      <span className="px-3 py-1.5 text-xs font-medium rounded-full bg-forest/10 text-forest flex items-center gap-1.5 shrink-0">
+                        <span className="w-2 h-2 rounded-full bg-forest animate-pulse" />
+                        Current
+                      </span>
+                    )}
                   </div>
-                  <div>
-                    <span className="text-xs font-medium text-muted-foreground uppercase tracking-wider">
-                      Chapter {index + 1}
-                    </span>
-                    <h3 className="text-2xl md:text-3xl font-bold text-foreground">
-                      {item.period}
-                    </h3>
-                  </div>
-                  {item.current && (
-                    <span className="ml-auto shrink-0 px-3 py-1.5 text-xs font-medium rounded-full bg-forest/10 text-forest flex items-center gap-1.5">
-                      <span className="w-2 h-2 rounded-full bg-forest animate-pulse" />
-                      Current
-                    </span>
-                  )}
-                </div>
 
-                {/* Card Content */}
-                <div className="flex-1 glass-card p-8 overflow-y-auto scrollbar-hide">
-                  <h4 className="text-2xl md:text-3xl font-display mb-2">
-                    {item.title}
-                  </h4>
-                  <p className="text-lg text-primary font-medium mb-4">
-                    @ {item.company}
-                  </p>
+                  {/* Card Body — scrollable di dalam card */}
+                  {/* data-lenis-prevent: cegah Lenis intercept scroll di dalam card */}
+                  <div
+                    data-lenis-prevent
+                    className="px-6 py-6 space-y-5 overflow-y-auto h-[calc(100%-5rem)] lg:scrollbar-hide"
+                  >
+                    {/* Role & Company */}
+                    <div>
+                      <h4 className="text-2xl md:text-3xl font-display mb-1">
+                        {item.title}
+                      </h4>
+                      <p className="text-base text-primary font-medium">
+                        @ {item.company}
+                      </p>
+                    </div>
 
-                  <p className="text-muted-foreground leading-relaxed mb-6">
-                    {item.description}
-                  </p>
+                    <p className="text-muted-foreground leading-relaxed text-sm">
+                      {item.description}
+                    </p>
 
-                  {/* Key Achievements */}
-                  {item.achievements && item.achievements.length > 0 && (
-                    <div className="mb-6">
-                      <h5 className="text-sm font-semibold mb-3 text-foreground uppercase tracking-wider">
-                        Key Achievements
+                    {/* Key Achievements */}
+                    {item.achievements && item.achievements.length > 0 && (
+                      <div>
+                        <h5 className="text-xs font-semibold mb-3 text-foreground uppercase tracking-wider">
+                          Key Achievements
+                        </h5>
+                        <ul className="space-y-2">
+                          {item.achievements
+                            .slice(0, 5)
+                            .map((achievement, i) => (
+                              <li key={i} className="flex items-start gap-2">
+                                <ChevronRight className="w-4 h-4 text-primary shrink-0 mt-0.5" />
+                                <span className="text-sm text-muted-foreground leading-relaxed">
+                                  {achievement}
+                                </span>
+                              </li>
+                            ))}
+                        </ul>
+                      </div>
+                    )}
+
+                    {/* Tech Stack */}
+                    <div>
+                      <h5 className="text-xs font-semibold mb-3 text-foreground uppercase tracking-wider">
+                        Technologies
                       </h5>
-                      <ul className="space-y-3">
-                        {item.achievements.slice(0, 5).map((achievement, i) => (
-                          <li
-                            key={i}
-                            className="achievement-item flex items-start gap-3"
+                      <div className="flex flex-wrap gap-2">
+                        {item.technologies.map((tech, techIndex) => (
+                          <span
+                            key={techIndex}
+                            className="px-3 py-1 text-xs font-medium rounded-full bg-muted/60 hover:bg-primary/10 hover:text-primary transition-colors cursor-default"
                           >
-                            <ChevronRight className="w-5 h-5 text-primary shrink-0 mt-0.5" />
-                            <span className="text-sm text-muted-foreground leading-relaxed">
-                              {achievement}
-                            </span>
-                          </li>
+                            {tech}
+                          </span>
                         ))}
-                      </ul>
+                      </div>
                     </div>
-                  )}
 
-                  {/* Tech Stack */}
-                  <div className="mb-4">
-                    <h5 className="text-sm font-semibold mb-3 text-foreground uppercase tracking-wider">
-                      Technologies
-                    </h5>
-                    <div className="flex flex-wrap gap-2">
-                      {item.technologies.map((tech, techIndex) => (
-                        <span
-                          key={techIndex}
-                          className="tech-badge px-3 py-1.5 text-xs font-medium rounded-full bg-muted/50 hover:bg-muted transition-colors"
-                        >
-                          {tech}
-                        </span>
-                      ))}
+                    {/* Location */}
+                    <div className="flex items-center gap-2 text-sm text-muted-foreground pt-4 border-t border-border">
+                      <MapPin className="w-4 h-4 shrink-0" />
+                      <span>{item.location}</span>
                     </div>
-                  </div>
-
-                  {/* Location */}
-                  <div className="flex items-center gap-2 text-sm text-muted-foreground pt-4 border-t border-border">
-                    <MapPin className="w-4 h-4" />
-                    <span>{item.location}</span>
                   </div>
                 </div>
-              </div>
-            );
-          })}
-
-          {/* End Spacer */}
-          <div className="flex-shrink-0 w-[10vw]" />
+              );
+            })}
+          </div>
         </div>
       </div>
     </section>
