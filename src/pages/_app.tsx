@@ -8,7 +8,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import Lenis from "lenis";
+
 import { AnimatePresence, motion } from "framer-motion";
 
 // Register GSAP plugins sekali di level app
@@ -20,34 +20,17 @@ export default function MyApp({ Component, pageProps }: AppProps) {
   const router = useRouter();
 
   useEffect(() => {
-    // Singleton Lenis — satu instance untuk seluruh app
-    const lenis = new Lenis({
-      duration: 1.2,
-      smoothWheel: true,
-      syncTouch: true,
-    });
-
-    // Sync Lenis scroll event ke GSAP ScrollTrigger
-    lenis.on("scroll", ScrollTrigger.update);
-
-    // Gunakan GSAP ticker sebagai RAF loop — lebih efisien dari requestAnimationFrame manual
-    const tickerCallback = (time: number) => lenis.raf(time * 1000);
-    gsap.ticker.add(tickerCallback);
-    gsap.ticker.lagSmoothing(0);
-
-    // Reset scroll ke top saat navigasi antar halaman
-    // Lenis tidak auto-reset seperti native scroll browser
+    // Native scroll — tidak pakai Lenis agar scroll terasa responsif
+    // GSAP ScrollTrigger bekerja langsung dengan native scroll
     const handleRouteChange = () => {
-      lenis.scrollTo(0, { immediate: true });
+      window.scrollTo({ top: 0, behavior: "instant" });
       ScrollTrigger.refresh();
     };
 
     router.events.on("routeChangeComplete", handleRouteChange);
 
     return () => {
-      gsap.ticker.remove(tickerCallback);
       router.events.off("routeChangeComplete", handleRouteChange);
-      lenis.destroy();
     };
   }, []);  // eslint-disable-line react-hooks/exhaustive-deps
 

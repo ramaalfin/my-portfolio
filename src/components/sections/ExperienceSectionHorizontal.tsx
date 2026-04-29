@@ -33,7 +33,7 @@ export const ExperienceSectionHorizontal = () => {
           trigger: stackRef.current,
           start: "top top",
           end: `+=${(totalCards - 1) * 700}`,
-          scrub: 1.2,
+          scrub: 0.5,
           pin: true,
           pinSpacing: true,
           anticipatePin: 1,
