@@ -43,7 +43,7 @@ export const HeroSection = () => {
         duration: 0.6,
         ease: "back.out(1.7)",
       },
-      "-=0.3"
+      "-=0.3",
     );
 
     // Animate subtitle
@@ -55,7 +55,7 @@ export const HeroSection = () => {
         duration: 0.8,
         ease: "power3.out",
       },
-      "-=0.3"
+      "-=0.3",
     );
 
     // Animate location
@@ -67,7 +67,7 @@ export const HeroSection = () => {
         duration: 0.6,
         ease: "power2.out",
       },
-      "-=0.4"
+      "-=0.4",
     );
 
     // Animate CTA buttons
@@ -79,7 +79,7 @@ export const HeroSection = () => {
         duration: 0.6,
         ease: "power2.out",
       },
-      "-=0.4"
+      "-=0.4",
     );
 
     // Animate social links
@@ -92,7 +92,7 @@ export const HeroSection = () => {
         duration: 0.5,
         ease: "back.out(1.7)",
       },
-      "-=0.3"
+      "-=0.3",
     );
 
     // Cleanup
@@ -139,9 +139,7 @@ export const HeroSection = () => {
             className="font-display text-4xl md:text-7xl lg:text-8xl tracking-tight mb-6 [perspective:800px]"
             style={{ transformStyle: "preserve-3d" }}
           >
-            <span className="block text-foreground">
-              Rama Alfin Baehaqi
-            </span>
+            <span className="block text-foreground">Rama Alfin Baehaqi</span>
           </h1>
 
           {/* Subtitle */}
@@ -158,7 +156,10 @@ export const HeroSection = () => {
           </div>
 
           {/* Location */}
-          <div ref={locationRef} className="flex items-center justify-center gap-4 mb-8">
+          <div
+            ref={locationRef}
+            className="flex items-center justify-center gap-4 mb-8"
+          >
             <span className="flex items-center gap-2 text-muted-foreground">
               <MapPin className="w-4 h-4" />
               Bogor, Indonesia
@@ -171,17 +172,17 @@ export const HeroSection = () => {
             className="flex flex-col sm:flex-row items-center justify-center gap-4"
           >
             <a
-              href="#projects"
+              href="#contact"
               onClick={(e) => {
                 e.preventDefault();
                 document
-                  .getElementById("projects")
+                  .getElementById("contact")
                   ?.scrollIntoView({ behavior: "smooth" });
               }}
               className="btn-haptic group relative px-8 py-4 rounded-full bg-primary text-primary-foreground font-medium overflow-hidden"
             >
               <span className="relative z-10 flex items-center gap-2">
-                View My Work
+                Get In Touch
                 <svg
                   className="w-4 h-4 transition-transform group-hover:translate-x-1"
                   fill="none"
@@ -197,19 +198,6 @@ export const HeroSection = () => {
                 </svg>
               </span>
               <div className="absolute inset-0 bg-gradient-to-r from-primary via-sunset to-primary bg-[length:200%_100%] transition-all duration-500 group-hover:bg-right" />
-            </a>
-
-            <a
-              href="#contact"
-              onClick={(e) => {
-                e.preventDefault();
-                document
-                  .getElementById("contact")
-                  ?.scrollIntoView({ behavior: "smooth" });
-              }}
-              className="btn-haptic px-8 py-4 rounded-full glass-card font-medium text-foreground hover:bg-muted/50 transition-all duration-300"
-            >
-              Get In Touch
             </a>
           </div>
 
