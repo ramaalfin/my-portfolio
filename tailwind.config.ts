@@ -14,6 +14,10 @@ export default {
 		},
 		extend: {
 			fontFamily: {
+				hero: [
+					'Saira Condensed',
+					'sans-serif'
+				],
 				display: [
 					'Clash Display',
 					'sans-serif'

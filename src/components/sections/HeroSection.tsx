@@ -1,104 +1,99 @@
 import { useEffect, useRef } from "react";
-import { GradientText } from "@/components/ui/AnimatedText";
-import { ScrollIndicator } from "@/components/ScrollIndicator";
 import { ParticleBackground } from "@/components/ParticleBackground";
-import { MapPin, Mail, Linkedin, Github } from "lucide-react";
 import { gsap } from "gsap";
 import SplitType from "split-type";
 
 export const HeroSection = () => {
   const containerRef = useRef<HTMLDivElement>(null);
-  const greetingRef = useRef<HTMLDivElement>(null);
   const headingRef = useRef<HTMLHeadingElement>(null);
-  const subtitleRef = useRef<HTMLDivElement>(null);
-  const locationRef = useRef<HTMLDivElement>(null);
-  const ctaRef = useRef<HTMLDivElement>(null);
-  const socialRef = useRef<HTMLDivElement>(null);
+  const taglineRef = useRef<HTMLParagraphElement>(null);
+  const glowRef = useRef<HTMLDivElement>(null);
+  const tlRef = useRef<gsap.core.Timeline | null>(null);
 
+  // ── Mouse-follow ambient glow ──
   useEffect(() => {
-    if (!headingRef.current) return;
+    const container = containerRef.current;
+    const glow = glowRef.current;
+    if (!container || !glow) return;
 
-    // Split heading text into characters
-    const split = new SplitType(headingRef.current, { types: "chars" });
+    const handleMouseMove = (e: MouseEvent) => {
+      const { clientX, clientY } = e;
+      const { left, top, width, height } = container.getBoundingClientRect();
+      const x = ((clientX - left) / width) * 100;
+      const y = ((clientY - top) / height) * 100;
 
-    // Create master timeline
-    const tl = gsap.timeline({ delay: 0.3 });
-
-    // Animate greeting badge
-    tl.from(greetingRef.current, {
-      opacity: 0,
-      y: -20,
-      duration: 0.6,
-      ease: "power2.out",
-    });
-
-    // Animate heading characters with 3D rotation
-    tl.from(
-      split.chars,
-      {
-        opacity: 0,
-        y: 60,
-        rotateX: -90,
-        stagger: 0.03,
-        duration: 0.6,
-        ease: "back.out(1.7)",
-      },
-      "-=0.3",
-    );
-
-    // Animate subtitle
-    tl.from(
-      subtitleRef.current,
-      {
-        opacity: 0,
-        y: 30,
-        duration: 0.8,
-        ease: "power3.out",
-      },
-      "-=0.3",
-    );
-
-    // Animate location
-    tl.from(
-      locationRef.current,
-      {
-        opacity: 0,
-        y: 20,
-        duration: 0.6,
+      gsap.to(glow, {
+        opacity: 0.6,
+        x: `${x}%`,
+        y: `${y}%`,
+        duration: 2,
         ease: "power2.out",
-      },
-      "-=0.4",
-    );
+      });
+    };
 
-    // Animate CTA buttons
-    tl.from(
-      ctaRef.current,
-      {
-        opacity: 0,
-        y: 20,
-        duration: 0.6,
-        ease: "power2.out",
-      },
-      "-=0.4",
-    );
+    const handleMouseLeave = () => {
+      gsap.to(glow, { opacity: 0, duration: 1 });
+    };
 
-    // Animate social links
-    tl.from(
-      socialRef.current?.children || [],
-      {
-        opacity: 0,
-        scale: 0.8,
-        stagger: 0.1,
-        duration: 0.5,
-        ease: "back.out(1.7)",
-      },
-      "-=0.3",
-    );
+    container.addEventListener("mousemove", handleMouseMove);
+    container.addEventListener("mouseleave", handleMouseLeave);
 
-    // Cleanup
     return () => {
-      split.revert();
-      tl.kill();
+      container.removeEventListener("mousemove", handleMouseMove);
+      container.removeEventListener("mouseleave", handleMouseLeave);
+    };
+  }, []);
+
+  // ── Block reveal — triggered after loading screen completes ──
+  useEffect(() => {
+    let headingSplit: SplitType | null = null;
+
+    const runReveal = () => {
+      if (!headingRef.current || !taglineRef.current) return;
+
+      headingSplit = new SplitType(headingRef.current, { types: "chars" });
+      const tl = gsap.timeline();
+      tlRef.current = tl;
+
+      // Act I — Name: 3D character drop-in
+      tl.to(headingRef.current, { opacity: 1, duration: 0.01 }).from(
+        headingSplit.chars,
+        {
+          opacity: 0,
+          y: 120,
+          rotateX: -90,
+          stagger: 0.06,
+          duration: 1.1,
+          ease: "power4.out",
+        },
+      );
+
+      // Act II — Tagline: blur-in reveal
+      tl.fromTo(
+        taglineRef.current,
+        { opacity: 0, y: 30, filter: "blur(8px)" },
+        {
+          opacity: 1,
+          y: 0,
+          filter: "blur(0px)",
+          duration: 1.2,
+          ease: "power2.out",
+        },
+        "-=0.5",
+      );
+    };
+
+    // Wait for loading screen, then sync with page fade-in (0.4s)
+    const handleLoadingComplete = () => {
+      setTimeout(runReveal, 500);
+    };
+
+    window.addEventListener("loading:complete", handleLoadingComplete);
+
+    return () => {
+      window.removeEventListener("loading:complete", handleLoadingComplete);
+      headingSplit?.revert();
+      tlRef.current?.kill();
     };
   }, []);
 
@@ -106,140 +101,78 @@ export const HeroSection = () => {
     <section
       id="hero"
       ref={containerRef}
-      className="relative min-h-screen flex items-center justify-center overflow-hidden  z-10"
+      className="relative min-h-screen flex items-center justify-center overflow-hidden z-10 bg-white"
     >
+      {/* ── Noise texture — editorial/print luxury feel ── */}
+      <div
+        className="absolute inset-0 z-20 pointer-events-none opacity-[0.025]"
+        style={{
+          backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E")`,
+          backgroundRepeat: "repeat",
+          backgroundSize: "256px 256px",
+        }}
+      />
+
+      {/* ── Subtle radial vignette ── */}
+      <div
+        className="absolute inset-0 z-10 pointer-events-none"
+        style={{
+          background:
+            "radial-gradient(ellipse at center, transparent 50%, rgba(255,255,255,0.4) 100%)",
+        }}
+      />
+
       <ParticleBackground />
 
-      {/* Animated gradient blobs */}
+      {/* ── Mouse-follow ambient glow ── */}
+      <div
+        ref={glowRef}
+        className="absolute z-10 w-[700px] h-[700px] rounded-full pointer-events-none opacity-0"
+        style={{
+          background:
+            "radial-gradient(circle, hsl(var(--primary) / 0.1) 0%, transparent 70%)",
+          transform: "translate(-50%, -50%)",
+          willChange: "transform, opacity",
+        }}
+      />
+
+      {/* ── Gradient blobs — richer, softer ── */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-1/4 -left-20 w-96 h-96 bg-primary/10 rounded-full blur-3xl animate-blob" />
+        <div className="absolute top-1/4 -left-20 w-[500px] h-[500px] bg-primary/6 rounded-full blur-[120px] animate-blob" />
         <div
-          className="absolute bottom-1/4 -right-20 w-96 h-96 bg-accent/10 rounded-full blur-3xl animate-blob animation-delay-2000"
+          className="absolute bottom-1/3 -right-20 w-[500px] h-[500px] bg-accent/6 rounded-full blur-[120px] animate-blob"
           style={{ animationDelay: "2s" }}
         />
         <div
-          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-sunset/5 rounded-full blur-3xl animate-blob animation-delay-4000"
+          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-sunset/4 rounded-full blur-[140px] animate-blob"
           style={{ animationDelay: "4s" }}
         />
       </div>
 
-      <div className="container relative z-10 px-4 lg:px-8 text-center">
-        <div className="max-w-4xl mx-auto">
-          {/* Greeting */}
-          <div ref={greetingRef} className="mb-6">
-            <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full glass-card text-sm font-medium text-muted-foreground">
-              <span className="w-2 h-2 rounded-full bg-forest animate-pulse" />
-              Available for new opportunities
-            </span>
-          </div>
+      {/* ── Corner accents — framing the composition ── */}
+      <div className="absolute top-10 left-10 w-20 h-20 border-l border-t border-primary/15 z-20 hidden lg:block" />
+      <div className="absolute bottom-10 right-10 w-20 h-20 border-r border-b border-primary/15 z-20 hidden lg:block" />
 
-          {/* Main Heading — SplitType + GSAP per char */}
+      {/* ── Content ── */}
+      <div className="container relative z-20 px-6 lg:px-8 text-center">
+        <div className="max-w-5xl mx-auto">
+          {/* Name — hidden until loading completes */}
           <h1
             ref={headingRef}
-            className="font-display text-4xl md:text-7xl lg:text-8xl tracking-tight mb-6 [perspective:800px]"
-            style={{ transformStyle: "preserve-3d" }}
+            className="font-hero text-5xl md:text-8xl lg:text-9xl xl:text-[14rem] font-extrabold tracking-[0.03em] mb-10 [perspective:1000px] leading-[0.9]"
+            style={{ transformStyle: "preserve-3d", opacity: 0 }}
           >
-            <span className="block text-foreground">Rama Alfin Baehaqi</span>
+            RAMA <br /> ALFIN
           </h1>
 
-          {/* Subtitle */}
-          <div ref={subtitleRef}>
-            <p className="text-xl md:text-2xl lg:text-3xl text-muted-foreground mb-4">
-              <GradientText animate>Frontend Engineer</GradientText>
-            </p>
-            <p className="text-base md:text-lg text-muted-foreground/80 max-w-2xl mx-auto mb-8 font-light leading-relaxed">
-              Delivering production-grade web and mobile applications with
-              <span className="text-primary"> React.js</span>,
-              <span className="text-accent"> Next.js</span>, and
-              <span className="text-forest"> TypeScript</span>
-            </p>
-          </div>
-
-          {/* Location */}
-          <div
-            ref={locationRef}
-            className="flex items-center justify-center gap-4 mb-8"
+          {/* Tagline — hidden until loading completes */}
+          <p
+            ref={taglineRef}
+            className="font-hero text-lg md:text-2xl lg:text-3xl font-medium tracking-[0.12em] text-muted-foreground"
+            style={{ opacity: 0 }}
           >
-            <span className="flex items-center gap-2 text-muted-foreground">
-              <MapPin className="w-4 h-4" />
-              Bogor, Indonesia
-            </span>
-          </div>
-
-          {/* CTA Buttons */}
-          <div
-            ref={ctaRef}
-            className="flex flex-col sm:flex-row items-center justify-center gap-4"
-          >
-            <a
-              href="#contact"
-              onClick={(e) => {
-                e.preventDefault();
-                document
-                  .getElementById("contact")
-                  ?.scrollIntoView({ behavior: "smooth" });
-              }}
-              className="btn-haptic group relative px-8 py-4 rounded-full bg-primary text-primary-foreground font-medium overflow-hidden"
-            >
-              <span className="relative z-10 flex items-center gap-2">
-                Get In Touch
-                <svg
-                  className="w-4 h-4 transition-transform group-hover:translate-x-1"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M17 8l4 4m0 0l-4 4m4-4H3"
-                  />
-                </svg>
-              </span>
-              <div className="absolute inset-0 bg-gradient-to-r from-primary via-sunset to-primary bg-[length:200%_100%] transition-all duration-500 group-hover:bg-right" />
-            </a>
-          </div>
-
-          {/* Social Links */}
-          <div
-            ref={socialRef}
-            className="flex items-center justify-center gap-4 mt-12 mb-20"
-          >
-            {[
-              {
-                icon: Mail,
-                href: "mailto:ramaalfin7@gmail.com",
-                label: "Email",
-              },
-              {
-                icon: Linkedin,
-                href: "https://linkedin.com/in/rama-alfin-baehaqi",
-                label: "LinkedIn",
-              },
-              {
-                icon: Github,
-                href: "https://github.com/ramaalfin",
-                label: "GitHub",
-              },
-            ].map(({ icon: Icon, href, label }) => (
-              <a
-                key={label}
-                href={href}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="p-3 rounded-full glass-card hover:bg-muted/50 hover:scale-110 transition-all duration-300"
-                aria-label={label}
-              >
-                <Icon className="w-5 h-5 text-muted-foreground" />
-              </a>
-            ))}
-          </div>
-        </div>
-
-        {/* Scroll Indicator */}
-        <div className="absolute bottom-0 left-1/2 -translate-x-1/2">
-          <ScrollIndicator targetId="about" />
+            Bringing digital ideas alive
+          </p>
         </div>
       </div>
     </section>

@@ -73,6 +73,7 @@ export default function LoadingScreen({ onComplete }: LoadingScreenProps) {
     const doneTimer = setTimeout(
       () => {
         setPhase("done");
+        window.dispatchEvent(new CustomEvent("loading:complete"));
         onComplete();
       },
       ENTER_DURATION + HOLD_DURATION + EXIT_DURATION,
