@@ -1,6 +1,8 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { cn } from "@/lib/utils";
-import { Menu, X, Sun, Moon, Globe } from "lucide-react";
+import { Menu, X, Sun, Moon } from "lucide-react";
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 const navItems = [
   { label: "Home", href: "#hero" },
@@ -16,6 +18,48 @@ export const Navigation = () => {
   const [activeSection, setActiveSection] = useState("hero");
   const [scrollProgress, setScrollProgress] = useState(0);
   const [isDark, setIsDark] = useState(false);
+  const navContainerRef = useRef<HTMLDivElement>(null);
+
+  // ── Hide navbar in hero, reveal when scrolled past ──
+  useEffect(() => {
+    const container = navContainerRef.current;
+    if (!container) return;
+
+    // Start hidden above viewport
+    gsap.set(container, { yPercent: -100 });
+
+    const st = ScrollTrigger.create({
+      trigger: "#hero",
+      start: "bottom top",
+      onEnter: () => {
+        gsap.to(container, {
+          yPercent: 0,
+          duration: 0.8,
+          ease: "power3.out",
+          overwrite: "auto",
+        });
+      },
+      onLeaveBack: () => {
+        gsap.to(container, {
+          yPercent: -100,
+          duration: 0.6,
+          ease: "power3.in",
+          overwrite: "auto",
+        });
+      },
+    });
+
+    // Refresh setelah loading screen selesai (layout stabil)
+    const onLoadingDone = () => {
+      setTimeout(() => ScrollTrigger.refresh(), 600);
+    };
+    window.addEventListener("loading:complete", onLoadingDone);
+
+    return () => {
+      st.kill();
+      window.removeEventListener("loading:complete", onLoadingDone);
+    };
+  }, []);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -63,18 +107,20 @@ export const Navigation = () => {
 
   return (
     <>
-      {/* Scroll Progress Bar */}
-      <div
-        className="scroll-progress"
-        style={{ width: `${scrollProgress}%` }}
-      />
+      {/* ── Navbar container — animated by GSAP ScrollTrigger ── */}
+      <div ref={navContainerRef} className="fixed top-0 left-0 right-0 z-40">
+        {/* Scroll Progress Bar */}
+        <div
+          className="scroll-progress"
+          style={{ width: `${scrollProgress}%` }}
+        />
 
-      <nav
-        className={cn(
-          "fixed top-0 left-0 right-0 z-40 transition-all duration-500",
-          isScrolled ? "nav-glass py-3 shadow-glass" : "bg-transparent py-6"
-        )}
-      >
+        <nav
+          className={cn(
+            "transition-all duration-500",
+            isScrolled ? "nav-glass py-3 shadow-glass" : "bg-transparent py-6"
+          )}
+        >
         <div className="container mx-auto px-4 lg:px-8">
           <div className="flex items-center justify-between">
             {/* Logo */}
@@ -184,6 +230,7 @@ export const Navigation = () => {
           </div>
         </div>
       </nav>
+      </div>
     </>
   );
 };

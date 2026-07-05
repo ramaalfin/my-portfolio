@@ -19,9 +19,9 @@ const BOX_SIZE = "clamp(64px, 13vw, 120px)";
 const EXIT_EASE = [0.76, 0, 0.24, 1] as const;
 
 export default function LoadingScreen({ onComplete }: LoadingScreenProps) {
-  const [phase, setPhase] = useState<"enter" | "hold" | "exit" | "done">(
-    "enter",
-  );
+  const [phase, setPhase] = useState<
+    "enter" | "hold" | "exitLetters" | "exitScreen" | "done"
+  >("enter");
   const [activeIndex, setActiveIndex] = useState(0);
   const seeds = useMemo(() => randomSeeds(8), []);
   const cycleRef = useRef<ReturnType<typeof setInterval> | null>(null);
@@ -47,7 +47,7 @@ export default function LoadingScreen({ onComplete }: LoadingScreenProps) {
         });
       }, 200);
     }
-    if (phase === "exit" && cycleRef.current) {
+    if (phase === "exitLetters" && cycleRef.current) {
       clearInterval(cycleRef.current);
       cycleRef.current = null;
     }
@@ -63,12 +63,17 @@ export default function LoadingScreen({ onComplete }: LoadingScreenProps) {
   useEffect(() => {
     const ENTER_DURATION = 400;
     const HOLD_DURATION = 1800;
-    const EXIT_DURATION = 800;
+    const EXIT_LETTERS_DURATION = 800; // R & A terbang ke kiri/kanan
+    const EXIT_SCREEN_DURATION = 700;  // seluruh screen geser ke atas
 
     const enterTimer = setTimeout(() => setPhase("hold"), ENTER_DURATION);
-    const exitTimer = setTimeout(
-      () => setPhase("exit"),
+    const exitLettersTimer = setTimeout(
+      () => setPhase("exitLetters"),
       ENTER_DURATION + HOLD_DURATION,
+    );
+    const exitScreenTimer = setTimeout(
+      () => setPhase("exitScreen"),
+      ENTER_DURATION + HOLD_DURATION + EXIT_LETTERS_DURATION,
     );
     const doneTimer = setTimeout(
       () => {
@@ -76,36 +81,43 @@ export default function LoadingScreen({ onComplete }: LoadingScreenProps) {
         window.dispatchEvent(new CustomEvent("loading:complete"));
         onComplete();
       },
-      ENTER_DURATION + HOLD_DURATION + EXIT_DURATION,
+      ENTER_DURATION + HOLD_DURATION + EXIT_LETTERS_DURATION + EXIT_SCREEN_DURATION,
     );
 
     return () => {
       clearTimeout(enterTimer);
-      clearTimeout(exitTimer);
+      clearTimeout(exitLettersTimer);
+      clearTimeout(exitScreenTimer);
       clearTimeout(doneTimer);
     };
   }, [onComplete]);
 
-  if (phase === "done") return null;
+  const isExitLetters =
+    phase === "exitLetters" || phase === "exitScreen" || phase === "done";
+  const isExitScreen = phase === "exitScreen" || phase === "done";
 
-  const isExit = phase === "exit";
+  if (phase === "done") return null;
 
   return (
     <motion.div
       className="fixed inset-0 z-[9999] flex items-center justify-center overflow-hidden"
       style={{ background: "#0d0d0d" }}
-      animate={{ opacity: isExit ? 0 : 1 }}
-      transition={{ duration: 0.5, ease: "easeInOut" }}
+      animate={{
+        y: isExitScreen ? "-100%" : "0%",
+      }}
+      transition={{
+        y: { duration: 0.7, ease: EXIT_EASE },
+      }}
     >
       <div className="flex items-center justify-center gap-2 sm:gap-3 md:gap-4">
-        {/* ── Huruf R ── */}
+        {/* ── Huruf R — terbang ke kiri saat exit ── */}
         <motion.div
           className="relative flex-shrink-0 flex items-center justify-center select-none overflow-hidden"
           style={{ width: BOX_SIZE, height: BOX_SIZE }}
           initial={{ opacity: 0, x: 50 }}
           animate={{
-            opacity: isExit ? 0 : 1,
-            x: isExit ? -window.innerWidth * 0.5 - 80 : 0,
+            opacity: isExitLetters ? 0 : 1,
+            x: isExitLetters ? -window.innerWidth * 0.5 - 80 : 0,
           }}
           transition={{
             opacity: { duration: 0.35, ease: "easeOut" },
@@ -134,15 +146,15 @@ export default function LoadingScreen({ onComplete }: LoadingScreenProps) {
           }}
           initial={{ opacity: 0, scale: 0 }}
           animate={{
-            opacity: isExit ? 0 : 1,
-            scale: isExit ? 0 : 1,
+            opacity: isExitLetters ? 0 : 1,
+            scale: isExitLetters ? 0 : 1,
           }}
           transition={{
             opacity: { duration: 0.35, delay: 0.1, ease: "easeOut" },
             scale: {
-              duration: isExit ? 0.5 : 0.45,
-              delay: isExit ? 0 : 0.08,
-              ease: isExit ? EXIT_EASE : [0.16, 1, 0.3, 1],
+              duration: isExitLetters ? 0.5 : 0.45,
+              delay: isExitLetters ? 0 : 0.08,
+              ease: isExitLetters ? EXIT_EASE : [0.16, 1, 0.3, 1],
             },
           }}
         >
@@ -161,14 +173,14 @@ export default function LoadingScreen({ onComplete }: LoadingScreenProps) {
           </AnimatePresence>
         </motion.div>
 
-        {/* ── Huruf A ── */}
+        {/* ── Huruf A — terbang ke kanan saat exit ── */}
         <motion.div
           className="relative flex-shrink-0 flex items-center justify-center select-none overflow-hidden"
           style={{ width: BOX_SIZE, height: BOX_SIZE }}
           initial={{ opacity: 0, x: -50 }}
           animate={{
-            opacity: isExit ? 0 : 1,
-            x: isExit ? window.innerWidth * 0.5 + 80 : 0,
+            opacity: isExitLetters ? 0 : 1,
+            x: isExitLetters ? window.innerWidth * 0.5 + 80 : 0,
           }}
           transition={{
             opacity: { duration: 0.35, ease: "easeOut" },
