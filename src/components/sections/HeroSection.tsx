@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { ParticleBackground } from "@/components/ParticleBackground";
 import { gsap } from "gsap";
 import SplitType from "split-type";
@@ -8,7 +8,10 @@ export const HeroSection = () => {
   const headingRef = useRef<HTMLHeadingElement>(null);
   const taglineRef = useRef<HTMLParagraphElement>(null);
   const glowRef = useRef<HTMLDivElement>(null);
+  const slicesContainerRef = useRef<HTMLDivElement>(null);
   const tlRef = useRef<gsap.core.Timeline | null>(null);
+  const reducedMotionRef = useRef(false);
+  const [reducedMotion, setReducedMotion] = useState(false);
 
   // ── Mouse-follow ambient glow ──
   useEffect(() => {
@@ -42,6 +45,19 @@ export const HeroSection = () => {
       container.removeEventListener("mousemove", handleMouseMove);
       container.removeEventListener("mouseleave", handleMouseLeave);
     };
+  }, []);
+
+  // ── Reduced motion detection ──
+  useEffect(() => {
+    const mediaQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
+    reducedMotionRef.current = mediaQuery.matches;
+    setReducedMotion(mediaQuery.matches);
+    const handleChange = (e: MediaQueryListEvent) => {
+      reducedMotionRef.current = e.matches;
+      setReducedMotion(e.matches);
+    };
+    mediaQuery.addEventListener("change", handleChange);
+    return () => mediaQuery.removeEventListener("change", handleChange);
   }, []);
 
   // ── Block reveal — triggered after loading screen completes ──
@@ -81,6 +97,42 @@ export const HeroSection = () => {
         },
         "-=0.5",
       );
+
+      // Act III — Horizontal slice glitch reveal (photo)
+      const slicesContainer = slicesContainerRef.current;
+      if (slicesContainer) {
+        const slices = gsap.utils.toArray(
+          slicesContainer.children,
+        ) as HTMLElement[];
+
+        if (reducedMotionRef.current) {
+          gsap.set(slices, { x: "0%" });
+          gsap.set(slicesContainer, { opacity: 1 });
+        } else {
+          // Set initial positions: alternate left/right
+          gsap.set(slices, {
+            x: (i) => (i % 2 === 0 ? "-120%" : "120%"),
+          });
+          // Staggered slide-in with back easing for glitchy overshoot
+          tl.to(
+            slices,
+            {
+              x: "0%",
+              duration: 0.8,
+              stagger: 0.06,
+              ease: "back.out(1.4)",
+            },
+            "-=0.6",
+          );
+          // Fade the container in
+          tl.fromTo(
+            slicesContainer,
+            { opacity: 0 },
+            { opacity: 1, duration: 0.3 },
+            "-=0.4",
+          );
+        }
+      }
     };
 
     // Wait for loading screen, then sync with page fade-in (0.4s)
@@ -154,25 +206,67 @@ export const HeroSection = () => {
       <div className="absolute bottom-10 right-10 w-20 h-20 border-r border-b border-primary/15 z-20 hidden lg:block" />
 
       {/* ── Content ── */}
-      <div className="container relative z-20 px-6 lg:px-8 text-center">
-        <div className="max-w-5xl mx-auto">
-          {/* Name — hidden until loading completes */}
-          <h1
-            ref={headingRef}
-            className="font-hero text-5xl md:text-8xl lg:text-9xl xl:text-[14rem] font-extrabold tracking-[0.03em] mb-10 [perspective:1000px] leading-[0.9]"
-            style={{ transformStyle: "preserve-3d", opacity: 0 }}
-          >
-            RAMA <br /> ALFIN
-          </h1>
+      <div className="container relative z-20 px-6 lg:px-8 w-full">
+        <div className="grid lg:grid-cols-2 gap-8 lg:gap-16 items-center max-w-6xl mx-auto">
+          {/* ── Left Column: Text ── */}
+          <div className="text-center lg:text-left">
+            {/* Name — hidden until loading completes */}
+            <h1
+              ref={headingRef}
+              className="font-hero text-5xl md:text-8xl lg:text-9xl xl:text-[14rem] font-extrabold tracking-[0.03em] mb-10 [perspective:1000px] leading-[0.9]"
+              style={{ transformStyle: "preserve-3d", opacity: 0 }}
+            >
+              RAMA <br /> ALFIN
+            </h1>
 
-          {/* Tagline — hidden until loading completes */}
-          <p
-            ref={taglineRef}
-            className="font-hero text-lg md:text-2xl lg:text-3xl font-medium tracking-[0.12em] text-muted-foreground"
-            style={{ opacity: 0 }}
+            {/* Tagline — hidden until loading completes */}
+            <p
+              ref={taglineRef}
+              className="font-hero text-lg md:text-2xl lg:text-3xl font-medium tracking-[0.12em] text-muted-foreground"
+              style={{ opacity: 0 }}
+            >
+              Bringing digital ideas alive
+            </p>
+
+            {/* Mobile photo — visible only below lg breakpoint */}
+            <div className="lg:hidden flex items-center justify-center mt-12">
+              <img
+                src="/assets/rama.png"
+                alt="Rama Alfin Baehaqi"
+                className="w-3/4 max-w-[280px] h-auto rounded-2xl shadow-lg"
+                loading="lazy"
+              />
+            </div>
+          </div>
+
+          {/* ── Right Column: Horizontal Slice Photo (desktop only) ── */}
+          <div
+            ref={slicesContainerRef}
+            className="relative hidden lg:flex items-center justify-center w-full"
+            style={{
+              minHeight: "clamp(350px, 55vh, 650px)",
+              opacity: 0,
+            }}
           >
-            Bringing digital ideas alive
-          </p>
+            {Array.from({ length: 8 }, (_, i) => {
+              const topInset = (i / 8) * 100;
+              const bottomInset = ((8 - 1 - i) / 8) * 100;
+              return (
+                <div
+                  key={i}
+                  className="absolute inset-0"
+                  style={{
+                    backgroundImage: "url(/assets/rama.png)",
+                    backgroundSize: "contain",
+                    backgroundPosition: "center",
+                    backgroundRepeat: "no-repeat",
+                    clipPath: `inset(${topInset}% 0 ${bottomInset}% 0)`,
+                    borderRadius: "1rem",
+                  }}
+                />
+              );
+            })}
+          </div>
         </div>
       </div>
     </section>
