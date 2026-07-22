@@ -24,6 +24,7 @@ export default function MyApp({ Component, pageProps }: AppProps) {
 
   const handleLoadingComplete = useCallback(() => {
     setIsLoading(false);
+    (window as any).__heroReady = true;
   }, []);
 
   useEffect(() => {

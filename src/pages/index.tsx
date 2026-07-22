@@ -1,7 +1,6 @@
 import { useEffect } from "react";
 import { Navigation } from "@/components/Navigation";
 import { HeroSection } from "@/components/sections/HeroSection";
-import { AboutSection } from "@/components/sections/AboutSection";
 import { ProjectsSection } from "@/components/sections/ProjectsSection";
 import { ContactSection } from "@/components/sections/ContactSection";
 import { Footer } from "@/components/Footer";
@@ -18,7 +17,7 @@ const Index = () => {
     if (metaDescription) {
       metaDescription.setAttribute(
         "content",
-        "Frontend Engineer with 2+ years of experience delivering production-grade web and mobile applications. Specialized in React.js, Next.js, and TypeScript with focus on performance optimization and scalable architecture."
+        "Frontend Engineer with 2+ years of experience delivering production-grade web and mobile applications. Specialized in React.js, Next.js, and TypeScript with focus on performance optimization and scalable architecture.",
       );
     } else {
       const meta = document.createElement("meta");
@@ -71,7 +70,6 @@ const Index = () => {
     <main className="relative overflow-x-hidden">
       <Navigation />
       <HeroSection />
-      <AboutSection />
       <ExperienceSectionHorizontal />
       <TechStackSection2 />
       <ProjectsSection />

@@ -1,145 +1,136 @@
 import { useEffect, useRef, useState } from "react";
-import { ParticleBackground } from "@/components/ParticleBackground";
 import { gsap } from "gsap";
 import SplitType from "split-type";
 
 export const HeroSection = () => {
   const containerRef = useRef<HTMLDivElement>(null);
   const headingRef = useRef<HTMLHeadingElement>(null);
-  const taglineRef = useRef<HTMLParagraphElement>(null);
-  const glowRef = useRef<HTMLDivElement>(null);
-  const slicesContainerRef = useRef<HTMLDivElement>(null);
+  const separatorRef = useRef<HTMLHRElement>(null);
+  const detailsRef = useRef<HTMLDivElement>(null);
+  const bodyRef = useRef<HTMLParagraphElement>(null);
+  const portraitRef = useRef<HTMLDivElement>(null);
   const tlRef = useRef<gsap.core.Timeline | null>(null);
-  const reducedMotionRef = useRef(false);
+  const hasRevealed = useRef(false);
   const [reducedMotion, setReducedMotion] = useState(false);
 
-  // ── Mouse-follow ambient glow ──
-  useEffect(() => {
-    const container = containerRef.current;
-    const glow = glowRef.current;
-    if (!container || !glow) return;
-
-    const handleMouseMove = (e: MouseEvent) => {
-      const { clientX, clientY } = e;
-      const { left, top, width, height } = container.getBoundingClientRect();
-      const x = ((clientX - left) / width) * 100;
-      const y = ((clientY - top) / height) * 100;
-
-      gsap.to(glow, {
-        opacity: 0.6,
-        x: `${x}%`,
-        y: `${y}%`,
-        duration: 2,
-        ease: "power2.out",
-      });
-    };
-
-    const handleMouseLeave = () => {
-      gsap.to(glow, { opacity: 0, duration: 1 });
-    };
-
-    container.addEventListener("mousemove", handleMouseMove);
-    container.addEventListener("mouseleave", handleMouseLeave);
-
-    return () => {
-      container.removeEventListener("mousemove", handleMouseMove);
-      container.removeEventListener("mouseleave", handleMouseLeave);
-    };
-  }, []);
-
-  // ── Reduced motion detection ──
+  // ═══════════════════════════════════════════════════════════
+  // Reduced motion detection
+  // ═══════════════════════════════════════════════════════════
   useEffect(() => {
     const mediaQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
-    reducedMotionRef.current = mediaQuery.matches;
     setReducedMotion(mediaQuery.matches);
-    const handleChange = (e: MediaQueryListEvent) => {
-      reducedMotionRef.current = e.matches;
+    const handleChange = (e: MediaQueryListEvent) =>
       setReducedMotion(e.matches);
-    };
     mediaQuery.addEventListener("change", handleChange);
     return () => mediaQuery.removeEventListener("change", handleChange);
   }, []);
 
-  // ── Block reveal — triggered after loading screen completes ──
+  // ═══════════════════════════════════════════════════════════
+  // Block reveal
+  // ═══════════════════════════════════════════════════════════
   useEffect(() => {
+    if (reducedMotion) return;
+
     let headingSplit: SplitType | null = null;
 
     const runReveal = () => {
-      if (!headingRef.current || !taglineRef.current) return;
+      if (hasRevealed.current) return;
+      if (
+        !headingRef.current ||
+        !separatorRef.current ||
+        !detailsRef.current ||
+        !bodyRef.current ||
+        !portraitRef.current
+      )
+        return;
+
+      hasRevealed.current = true;
 
       headingSplit = new SplitType(headingRef.current, { types: "chars" });
       const tl = gsap.timeline();
       tlRef.current = tl;
 
-      // Act I — Name: 3D character drop-in
+      // 1. Heading — chars rise up
       tl.to(headingRef.current, { opacity: 1, duration: 0.01 }).from(
         headingSplit.chars,
         {
           opacity: 0,
-          y: 120,
-          rotateX: -90,
-          stagger: 0.06,
-          duration: 1.1,
-          ease: "power4.out",
+          y: 60,
+          stagger: 0.04,
+          duration: 0.8,
+          ease: "power3.out",
         },
       );
 
-      // Act II — Tagline: blur-in reveal
+      // 2. Separator line — draw from center
       tl.fromTo(
-        taglineRef.current,
-        { opacity: 0, y: 30, filter: "blur(8px)" },
+        separatorRef.current,
+        { scaleX: 0, opacity: 0 },
         {
+          scaleX: 1,
           opacity: 1,
-          y: 0,
-          filter: "blur(0px)",
-          duration: 1.2,
-          ease: "power2.out",
+          duration: 0.8,
+          ease: "power3.inOut",
         },
-        "-=0.5",
+        "-=0.3",
       );
 
-      // Act III — Horizontal slice glitch reveal (photo)
-      const slicesContainer = slicesContainerRef.current;
-      if (slicesContainer) {
-        const slices = gsap.utils.toArray(
-          slicesContainer.children,
+      // 3. Detail columns — fade up
+      if (detailsRef.current) {
+        const items = gsap.utils.toArray(
+          detailsRef.current.children,
         ) as HTMLElement[];
-
-        if (reducedMotionRef.current) {
-          gsap.set(slices, { x: "0%" });
-          gsap.set(slicesContainer, { opacity: 1 });
-        } else {
-          // Set initial positions: alternate left/right
-          gsap.set(slices, {
-            x: (i) => (i % 2 === 0 ? "-120%" : "120%"),
-          });
-          // Staggered slide-in with back easing for glitchy overshoot
-          tl.to(
-            slices,
-            {
-              x: "0%",
-              duration: 0.8,
-              stagger: 0.06,
-              ease: "back.out(1.4)",
-            },
-            "-=0.6",
-          );
-          // Fade the container in
-          tl.fromTo(
-            slicesContainer,
-            { opacity: 0 },
-            { opacity: 1, duration: 0.3 },
-            "-=0.4",
-          );
-        }
+        tl.fromTo(
+          items,
+          { opacity: 0, y: 20 },
+          {
+            opacity: 1,
+            y: 0,
+            stagger: 0.1,
+            duration: 0.6,
+            ease: "power2.out",
+          },
+          "-=0.4",
+        );
       }
+
+      // 4. Body text — fade up
+      tl.fromTo(
+        bodyRef.current,
+        { opacity: 0, y: 24 },
+        { opacity: 1, y: 0, duration: 0.8, ease: "power2.out" },
+        "-=0.3",
+      );
+
+      // 5. Portrait — scale reveal
+      tl.fromTo(
+        portraitRef.current,
+        { scale: 0.94, opacity: 0 },
+        {
+          scale: 1,
+          opacity: 1,
+          duration: 1.0,
+          ease: "power3.out",
+        },
+        "-=0.4",
+      );
     };
 
-    // Wait for loading screen, then sync with page fade-in (0.4s)
     const handleLoadingComplete = () => {
       setTimeout(runReveal, 500);
     };
 
+    // HMR reload: app already loaded, reveal immediately
+    if ((window as any).__heroReady) {
+      const timer = setTimeout(runReveal, 300);
+      return () => {
+        clearTimeout(timer);
+        headingSplit?.revert();
+        tlRef.current?.kill();
+      };
+    }
+
+    // Initial load: wait for loading:complete event
     window.addEventListener("loading:complete", handleLoadingComplete);
 
     return () => {
@@ -147,127 +138,96 @@ export const HeroSection = () => {
       headingSplit?.revert();
       tlRef.current?.kill();
     };
-  }, []);
+  }, [reducedMotion]);
 
   return (
     <section
       id="hero"
       ref={containerRef}
-      className="relative min-h-screen flex items-center justify-center overflow-hidden z-10 bg-white"
+      className="relative flex flex-col items-center overflow-hidden z-10 bg-white"
     >
-      {/* ── Noise texture — editorial/print luxury feel ── */}
-      <div
-        className="absolute inset-0 z-20 pointer-events-none opacity-[0.025]"
-        style={{
-          backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E")`,
-          backgroundRepeat: "repeat",
-          backgroundSize: "256px 256px",
-        }}
-      />
+      <div className="container w-full max-w-5xl mx-auto px-6 md:px-10 lg:px-12 flex flex-col lg:items-center pt-12 md:pt-32 lg:pt-36 pb-12 md:pb-16">
+        {/* ── Heading: "Rama Alfin" — large bold sans-serif ── */}
+        <h1
+          ref={headingRef}
+          className="font-hero text-9xl md:text-7xl lg:text-8xl xl:text-[7rem] font-bold tracking-wider leading-[0.9] text-left lg:text-center"
+          style={{ color: "#000", opacity: 0 }}
+        >
+          Rama <br className="sm:hidden" /> Alfin
+        </h1>
 
-      {/* ── Subtle radial vignette ── */}
-      <div
-        className="absolute inset-0 z-10 pointer-events-none"
-        style={{
-          background:
-            "radial-gradient(ellipse at center, transparent 50%, rgba(255,255,255,0.4) 100%)",
-        }}
-      />
-
-      <ParticleBackground />
-
-      {/* ── Mouse-follow ambient glow ── */}
-      <div
-        ref={glowRef}
-        className="absolute z-10 w-[700px] h-[700px] rounded-full pointer-events-none opacity-0"
-        style={{
-          background:
-            "radial-gradient(circle, hsl(var(--primary) / 0.1) 0%, transparent 70%)",
-          transform: "translate(-50%, -50%)",
-          willChange: "transform, opacity",
-        }}
-      />
-
-      {/* ── Gradient blobs — richer, softer ── */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-1/4 -left-20 w-[500px] h-[500px] bg-primary/6 rounded-full blur-[120px] animate-blob" />
-        <div
-          className="absolute bottom-1/3 -right-20 w-[500px] h-[500px] bg-accent/6 rounded-full blur-[120px] animate-blob"
-          style={{ animationDelay: "2s" }}
+        {/* ── Thin separator line ── */}
+        <hr
+          ref={separatorRef}
+          className="w-full max-w-lg border-0 h-px mt-8 md:mt-10 lg:mt-12 mb-8 md:mb-10 lg:mb-12"
+          style={{
+            backgroundColor: "#d1d1d1",
+            opacity: 0,
+            transformOrigin: "center",
+          }}
         />
+
+        {/* ── Three-column details ── */}
         <div
-          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-sunset/4 rounded-full blur-[140px] animate-blob"
-          style={{ animationDelay: "4s" }}
-        />
-      </div>
-
-      {/* ── Corner accents — framing the composition ── */}
-      <div className="absolute top-10 left-10 w-20 h-20 border-l border-t border-primary/15 z-20 hidden lg:block" />
-      <div className="absolute bottom-10 right-10 w-20 h-20 border-r border-b border-primary/15 z-20 hidden lg:block" />
-
-      {/* ── Content ── */}
-      <div className="container relative z-20 px-6 lg:px-8 w-full">
-        <div className="grid lg:grid-cols-2 gap-8 lg:gap-16 items-center max-w-6xl mx-auto">
-          {/* ── Left Column: Text ── */}
-          <div className="text-center lg:text-left">
-            {/* Name — hidden until loading completes */}
-            <h1
-              ref={headingRef}
-              className="font-hero text-5xl md:text-8xl lg:text-9xl xl:text-[14rem] font-extrabold tracking-[0.03em] mb-10 [perspective:1000px] leading-[0.9]"
-              style={{ transformStyle: "preserve-3d", opacity: 0 }}
-            >
-              RAMA <br /> ALFIN
-            </h1>
-
-            {/* Tagline — hidden until loading completes */}
-            <p
-              ref={taglineRef}
-              className="font-hero text-lg md:text-2xl lg:text-3xl font-medium tracking-[0.12em] text-muted-foreground"
-              style={{ opacity: 0 }}
-            >
-              Bringing digital ideas alive
-            </p>
-
-            {/* Mobile photo — visible only below lg breakpoint */}
-            <div className="lg:hidden flex items-center justify-center mt-12">
-              <img
-                src="/assets/rama.png"
-                alt="Rama Alfin Baehaqi"
-                className="w-3/4 max-w-[280px] h-auto rounded-2xl shadow-lg"
-                loading="lazy"
-              />
-            </div>
-          </div>
-
-          {/* ── Right Column: Horizontal Slice Photo (desktop only) ── */}
-          <div
-            ref={slicesContainerRef}
-            className="relative hidden lg:flex items-center justify-center w-full"
-            style={{
-              minHeight: "clamp(350px, 55vh, 650px)",
-              opacity: 0,
-            }}
+          ref={detailsRef}
+          className="flex flex-col md:flex-row lg:items-center justify-center gap-3 md:gap-8 lg:gap-12 text-left lg:text-center"
+        >
+          <span
+            className="font-mono text-xs md:text-sm tracking-[0.06em] uppercase"
+            style={{ color: "#555", opacity: 0 }}
           >
-            {Array.from({ length: 8 }, (_, i) => {
-              const topInset = (i / 8) * 100;
-              const bottomInset = ((8 - 1 - i) / 8) * 100;
-              return (
-                <div
-                  key={i}
-                  className="absolute inset-0"
-                  style={{
-                    backgroundImage: "url(/assets/rama.png)",
-                    backgroundSize: "contain",
-                    backgroundPosition: "center",
-                    backgroundRepeat: "no-repeat",
-                    clipPath: `inset(${topInset}% 0 ${bottomInset}% 0)`,
-                    borderRadius: "1rem",
-                  }}
-                />
-              );
-            })}
-          </div>
+            Frontend Engineer & AI Enthusiast
+          </span>
+          <span
+            className="hidden md:inline font-mono text-sm"
+            style={{ color: "#ccc", opacity: 0 }}
+          >
+            |
+          </span>
+          <span
+            className="font-mono text-xs md:text-sm tracking-[0.06em] uppercase"
+            style={{ color: "#555", opacity: 0 }}
+          >
+            Based in Bogor, Indonesia
+          </span>
+          <span
+            className="hidden md:inline font-mono text-sm"
+            style={{ color: "#ccc", opacity: 0 }}
+          >
+            |
+          </span>
+          <span
+            className="font-mono text-xs md:text-sm tracking-[0.06em] uppercase"
+            style={{ color: "#555", opacity: 0 }}
+          >
+            Working Globally
+          </span>
         </div>
+
+        {/* ── Body text paragraph ── */}
+        <p
+          ref={bodyRef}
+          className="font-sans text-base md:text-lg lg:text-xl font-bold leading-relaxed lg:text-center max-w-80 md:max-w-xl lg:max-w-2xl mt-8 md:mt-10 lg:mt-12"
+          style={{ color: "#1a1a1a", opacity: 0 }}
+        >
+          [A visionary Frontend Engineer from Indonesia, showcasing a portfolio
+          of visually stunning campaigns that blend artistry and innovation.]
+        </p>
+      </div>
+      {/* ── Portrait — chest up, centered ── */}
+      <div
+        ref={portraitRef}
+        className="relative w-full md:w-auto md:max-w-md lg:max-w-xl md:mx-auto md:mt-14 lg:mt-16 overflow-hidden bg-gray-100 md:bg-transparent"
+        style={{ opacity: 0 }}
+      >
+        <img
+          src="/assets/rama-nobg.png"
+          alt="Rama Alfin Baehaqi"
+          className="w-full h-auto object-cover max-h-[340px] md:max-h-[400px] lg:max-h-[480px]"
+          style={{
+            objectPosition: "top",
+          }}
+        />
       </div>
     </section>
   );
