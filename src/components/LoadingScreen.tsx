@@ -5,17 +5,13 @@ interface LoadingScreenProps {
   onComplete: () => void;
 }
 
-// Generate random seeds — stable per mount
 function randomSeeds(count: number): string[] {
   return Array.from({ length: count }, () =>
     Math.random().toString(36).substring(2, 10),
   );
 }
 
-// Shared square box size — uniform untuk huruf & gambar
 const BOX_SIZE = "clamp(64px, 13vw, 120px)";
-
-// Shared exit easing
 const EXIT_EASE = [0.76, 0, 0.24, 1] as const;
 
 export default function LoadingScreen({ onComplete }: LoadingScreenProps) {
@@ -26,7 +22,6 @@ export default function LoadingScreen({ onComplete }: LoadingScreenProps) {
   const seeds = useMemo(() => randomSeeds(8), []);
   const cycleRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
-  // Lock body scroll
   useEffect(() => {
     document.body.style.overflow = "hidden";
     return () => {
@@ -34,7 +29,6 @@ export default function LoadingScreen({ onComplete }: LoadingScreenProps) {
     };
   }, []);
 
-  // Cycle through images during hold phase
   useEffect(() => {
     if (phase === "hold" && !cycleRef.current) {
       cycleRef.current = setInterval(() => {
@@ -59,12 +53,11 @@ export default function LoadingScreen({ onComplete }: LoadingScreenProps) {
     };
   }, [phase, seeds.length]);
 
-  // Animation timeline
   useEffect(() => {
     const ENTER_DURATION = 400;
     const HOLD_DURATION = 1800;
-    const EXIT_LETTERS_DURATION = 800; // R & A terbang ke kiri/kanan
-    const EXIT_SCREEN_DURATION = 700;  // seluruh screen geser ke atas
+    const EXIT_LETTERS_DURATION = 800;
+    const EXIT_SCREEN_DURATION = 700;
 
     const enterTimer = setTimeout(() => setPhase("hold"), ENTER_DURATION);
     const exitLettersTimer = setTimeout(
@@ -101,7 +94,7 @@ export default function LoadingScreen({ onComplete }: LoadingScreenProps) {
   return (
     <motion.div
       className="fixed inset-0 z-[9999] flex items-center justify-center overflow-hidden"
-      style={{ background: "#0d0d0d" }}
+      style={{ background: "#0A0A0A" }}
       animate={{
         y: isExitScreen ? "-100%" : "0%",
       }}
@@ -110,7 +103,7 @@ export default function LoadingScreen({ onComplete }: LoadingScreenProps) {
       }}
     >
       <div className="flex items-center justify-center gap-2 sm:gap-3 md:gap-4">
-        {/* ── Huruf R — terbang ke kiri saat exit ── */}
+        {/* Letter R */}
         <motion.div
           className="relative flex-shrink-0 flex items-center justify-center select-none overflow-hidden"
           style={{ width: BOX_SIZE, height: BOX_SIZE }}
@@ -127,22 +120,23 @@ export default function LoadingScreen({ onComplete }: LoadingScreenProps) {
           <span
             className="text-white leading-none flex items-center justify-center"
             style={{
-              fontFamily: "'Roboto Condensed', sans-serif",
+              fontFamily: "'Inter', sans-serif",
               fontWeight: 500,
               fontSize: BOX_SIZE,
+              letterSpacing: "-2px",
             }}
           >
             R
           </span>
         </motion.div>
 
-        {/* ── Gambar random bergantian ── */}
+        {/* Random image */}
         <motion.div
           className="relative flex-shrink-0 overflow-hidden"
           style={{
             width: BOX_SIZE,
             height: BOX_SIZE,
-            borderRadius: "3px",
+            borderRadius: "4px",
           }}
           initial={{ opacity: 0, scale: 0 }}
           animate={{
@@ -173,7 +167,7 @@ export default function LoadingScreen({ onComplete }: LoadingScreenProps) {
           </AnimatePresence>
         </motion.div>
 
-        {/* ── Huruf A — terbang ke kanan saat exit ── */}
+        {/* Letter A */}
         <motion.div
           className="relative flex-shrink-0 flex items-center justify-center select-none overflow-hidden"
           style={{ width: BOX_SIZE, height: BOX_SIZE }}
@@ -190,9 +184,10 @@ export default function LoadingScreen({ onComplete }: LoadingScreenProps) {
           <span
             className="text-white leading-none flex items-center justify-center"
             style={{
-              fontFamily: "'Roboto Condensed', sans-serif",
+              fontFamily: "'Inter', sans-serif",
               fontWeight: 500,
               fontSize: BOX_SIZE,
+              letterSpacing: "-2px",
             }}
           >
             A

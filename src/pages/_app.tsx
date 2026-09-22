@@ -13,7 +13,6 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { AnimatePresence, motion } from "framer-motion";
 import LoadingScreen from "@/components/LoadingScreen";
 
-// Register GSAP plugins sekali di level app
 gsap.registerPlugin(ScrollTrigger);
 
 const queryClient = new QueryClient();
@@ -28,8 +27,9 @@ export default function MyApp({ Component, pageProps }: AppProps) {
   }, []);
 
   useEffect(() => {
-    // Native scroll — tidak pakai Lenis agar scroll terasa responsif
-    // GSAP ScrollTrigger bekerja langsung dengan native scroll
+    // Force dark mode
+    document.documentElement.classList.add("dark");
+
     const handleRouteChange = () => {
       window.scrollTo({ top: 0, behavior: "instant" });
       ScrollTrigger.refresh();
@@ -40,26 +40,19 @@ export default function MyApp({ Component, pageProps }: AppProps) {
     return () => {
       router.events.off("routeChangeComplete", handleRouteChange);
     };
-  }, []);  // eslint-disable-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
         <Head>
-          <link rel="preconnect" href="https://fonts.googleapis.com" />
-          <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-          <link
-            href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:ital,wght@0,100..900;1,100..900&family=Saira+Condensed:wght@100;200;300;400;500;600;700;800;900&display=swap"
-            rel="stylesheet"
-          />
+          <meta name="theme-color" content="#0A0A0A" />
         </Head>
         <Toaster />
         <Sonner />
 
-        {/* Loading Screen — tampil hanya saat initial load */}
         {isLoading && <LoadingScreen onComplete={handleLoadingComplete} />}
 
-        {/* Page content — hidden sampai loading selesai, lalu fade in */}
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: isLoading ? 0 : 1 }}

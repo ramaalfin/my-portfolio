@@ -1,6 +1,5 @@
 import { useState, useEffect, useRef } from "react";
 import { cn } from "@/lib/utils";
-import { Menu, X, Sun, Moon } from "lucide-react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
@@ -13,19 +12,18 @@ const navItems = [
 ];
 
 export const Navigation = () => {
-  const [isScrolled, setIsScrolled] = useState(false);
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
   const [activeSection, setActiveSection] = useState("hero");
   const [scrollProgress, setScrollProgress] = useState(0);
-  const [isDark, setIsDark] = useState(false);
   const navContainerRef = useRef<HTMLDivElement>(null);
+  const drawerRef = useRef<HTMLDivElement>(null);
+  const overlayRef = useRef<HTMLDivElement>(null);
 
-  // ── Hide navbar in hero, reveal when scrolled past ──
+  // Hide navbar in hero, reveal when scrolled
   useEffect(() => {
     const container = navContainerRef.current;
     if (!container) return;
 
-    // Start hidden above viewport
     gsap.set(container, { yPercent: -100 });
 
     const st = ScrollTrigger.create({
@@ -49,7 +47,6 @@ export const Navigation = () => {
       },
     });
 
-    // Refresh setelah loading screen selesai (layout stabil)
     const onLoadingDone = () => {
       setTimeout(() => ScrollTrigger.refresh(), 600);
     };
@@ -61,19 +58,16 @@ export const Navigation = () => {
     };
   }, []);
 
+  // Scroll progress + active section
   useEffect(() => {
     const handleScroll = () => {
-      setIsScrolled(window.scrollY > 50);
-
-      // Calculate scroll progress
       const totalHeight =
         document.documentElement.scrollHeight - window.innerHeight;
       const progress = (window.scrollY / totalHeight) * 100;
       setScrollProgress(progress);
 
-      // Determine active section
       const sections = navItems.map((item) => item.href.substring(1));
-      for (const section of sections.reverse()) {
+      for (const section of [...sections].reverse()) {
         const element = document.getElementById(section);
         if (element) {
           const rect = element.getBoundingClientRect();
@@ -89,27 +83,69 @@ export const Navigation = () => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  // Force dark
   useEffect(() => {
-    if (isDark) {
-      document.documentElement.classList.add("dark");
+    document.documentElement.classList.add("dark");
+  }, []);
+
+  // Drawer open/close with GSAP
+  useEffect(() => {
+    const drawer = drawerRef.current;
+    const overlay = overlayRef.current;
+    if (!drawer || !overlay) return;
+
+    if (isOpen) {
+      document.body.style.overflow = "hidden";
+      gsap.set(drawer, { x: "100%" });
+      gsap.set(overlay, { opacity: 0, display: "none" });
+      gsap.to(overlay, {
+        opacity: 1,
+        display: "block",
+        duration: 0.3,
+        ease: "power2.out",
+      });
+      gsap.to(drawer, {
+        x: "0%",
+        duration: 0.4,
+        ease: "power3.out",
+      });
     } else {
-      document.documentElement.classList.remove("dark");
+      document.body.style.overflow = "";
+      gsap.to(drawer, {
+        x: "100%",
+        duration: 0.35,
+        ease: "power3.in",
+      });
+      gsap.to(overlay, {
+        opacity: 0,
+        duration: 0.3,
+        ease: "power2.in",
+        onComplete: () => {
+          gsap.set(overlay, { display: "none" });
+        },
+      });
     }
-  }, [isDark]);
+
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [isOpen]);
 
   const scrollToSection = (href: string) => {
-    const element = document.querySelector(href);
-    if (element) {
-      element.scrollIntoView({ behavior: "smooth" });
-    }
-    setIsMobileMenuOpen(false);
+    setIsOpen(false);
+    setTimeout(() => {
+      const element = document.querySelector(href);
+      if (element) {
+        element.scrollIntoView({ behavior: "smooth" });
+      }
+    }, 400);
   };
 
   return (
     <>
-      {/* ── Navbar container — animated by GSAP ScrollTrigger ── */}
+      {/* ── Top Bar ── */}
       <div ref={navContainerRef} className="fixed top-0 left-0 right-0 z-40">
-        {/* Scroll Progress Bar */}
+        {/* Scroll Progress */}
         <div
           className="scroll-progress"
           style={{ width: `${scrollProgress}%` }}
@@ -118,11 +154,12 @@ export const Navigation = () => {
         <nav
           className={cn(
             "transition-all duration-500",
-            isScrolled ? "nav-glass py-3 shadow-glass" : "bg-transparent py-6"
+            isOpen
+              ? "bg-background/90 backdrop-blur-xl"
+              : "bg-transparent"
           )}
         >
-        <div className="container mx-auto px-4 lg:px-8">
-          <div className="flex items-center justify-between">
+          <div className="flex items-center justify-between px-5 md:px-8 py-4 md:py-5">
             {/* Logo */}
             <a
               href="#hero"
@@ -130,106 +167,120 @@ export const Navigation = () => {
                 e.preventDefault();
                 scrollToSection("#hero");
               }}
-              className="relative group"
             >
-              <span className="font-serif text-2xl font-normal tracking-tight">
-                <span className="gradient-text">R</span>
-                <span className="text-foreground">ama</span>
+              <span
+                className="text-xl font-medium"
+                style={{ letterSpacing: "-1px", color: "hsl(0 0% 100%)" }}
+              >
+                Rama
               </span>
-              <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-primary transition-all duration-300 group-hover:w-full" />
             </a>
 
-            {/* Desktop Navigation */}
-            <div className="hidden md:flex items-center gap-1">
-              {navItems.map((item) => (
-                <a
-                  key={item.href}
-                  href={item.href}
-                  onClick={(e) => {
-                    e.preventDefault();
-                    scrollToSection(item.href);
-                  }}
-                  className={cn(
-                    "relative px-4 py-2 text-sm font-medium transition-colors duration-300 rounded-full",
-                    activeSection === item.href.substring(1)
-                      ? "text-primary"
-                      : "text-muted-foreground hover:text-foreground"
-                  )}
-                >
-                  {item.label}
-                  {activeSection === item.href.substring(1) && (
-                    <span className="absolute bottom-0 left-1/2 -translate-x-1/2 w-1 h-1 rounded-full bg-primary" />
-                  )}
-                </a>
-              ))}
-            </div>
-
-            {/* Right Side Actions */}
-            <div className="flex items-center gap-2">
-              {/* Theme Toggle */}
-              <button
-                onClick={() => setIsDark(!isDark)}
-                className="p-2 rounded-full hover:bg-muted transition-colors duration-300"
-                aria-label="Toggle theme"
-              >
-                {isDark ? (
-                  <Sun className="w-5 h-5 text-foreground" />
-                ) : (
-                  <Moon className="w-5 h-5 text-foreground" />
+            {/* Hamburger — 2 lines */}
+            <button
+              onClick={() => setIsOpen(!isOpen)}
+              className="relative w-8 h-8 flex flex-col items-end justify-center gap-[6px]"
+              aria-label="Toggle menu"
+            >
+              <span
+                className={cn(
+                  "block h-[1.5px] rounded-full transition-all duration-300",
+                  isOpen ? "w-5 rotate-45 translate-y-[3.75px]" : "w-6"
                 )}
-              </button>
-
-              {/* Mobile Menu Toggle */}
-              <button
-                onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-                className="md:hidden p-2 rounded-full hover:bg-muted transition-colors duration-300"
-                aria-label="Toggle menu"
-              >
-                {isMobileMenuOpen ? (
-                  <X className="w-6 h-6" />
-                ) : (
-                  <Menu className="w-6 h-6" />
+                style={{ background: "hsl(0 0% 100%)" }}
+              />
+              <span
+                className={cn(
+                  "block h-[1.5px] rounded-full transition-all duration-300",
+                  isOpen ? "w-5 -rotate-45 -translate-y-[3.75px]" : "w-4"
                 )}
-              </button>
-            </div>
+                style={{ background: "hsl(0 0% 100%)" }}
+              />
+            </button>
           </div>
+        </nav>
+      </div>
+
+      {/* ── Overlay ── */}
+      <div
+        ref={overlayRef}
+        className="fixed inset-0 z-40"
+        style={{ background: "rgba(0, 0, 0, 0.6)", display: "none" }}
+        onClick={() => setIsOpen(false)}
+      />
+
+      {/* ── Drawer ── */}
+      <div
+        ref={drawerRef}
+        className="fixed top-0 right-0 bottom-0 z-50 w-[280px] md:w-[320px] flex flex-col"
+        style={{
+          background: "hsl(0 0% 6%)",
+          borderLeft: "1px solid hsl(0 0% 14%)",
+          transform: "translateX(100%)",
+        }}
+      >
+        {/* Drawer Header */}
+        <div className="flex items-center justify-between px-5 md:px-8 py-4 md:py-5">
+          <span
+            className="text-xl font-medium"
+            style={{ letterSpacing: "-1px", color: "hsl(0 0% 100%)" }}
+          >
+            Rama
+          </span>
+          <button
+            onClick={() => setIsOpen(false)}
+            className="w-8 h-8 flex items-center justify-center rounded-md transition-colors"
+            style={{ color: "hsl(0 0% 64%)" }}
+            aria-label="Close menu"
+          >
+            <svg
+              width="14"
+              height="14"
+              viewBox="0 0 14 14"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="1.5"
+              strokeLinecap="round"
+            >
+              <line x1="1" y1="1" x2="13" y2="13" />
+              <line x1="13" y1="1" x2="1" y2="13" />
+            </svg>
+          </button>
         </div>
 
-        {/* Mobile Menu */}
-        <div
-          className={cn(
-            "md:hidden absolute top-full left-0 right-0 nav-glass border-t border-border/50 overflow-hidden transition-all duration-500 ease-smooth",
-            isMobileMenuOpen ? "max-h-96 opacity-100" : "max-h-0 opacity-0"
-          )}
-        >
-          <div className="container mx-auto px-4 py-4">
-            <div className="flex flex-col gap-2">
-              {navItems.map((item, index) => (
-                <a
-                  key={item.href}
-                  href={item.href}
-                  onClick={(e) => {
-                    e.preventDefault();
-                    scrollToSection(item.href);
-                  }}
-                  className={cn(
-                    "px-4 py-3 rounded-xl text-base font-medium transition-all duration-300",
-                    "hover:bg-muted",
-                    activeSection === item.href.substring(1)
-                      ? "text-primary bg-primary/5"
-                      : "text-muted-foreground"
-                  )}
-                  style={{
-                    animationDelay: `${index * 50}ms`,
-                  }}
-                >
-                  {item.label}
-                </a>
-              ))}
-            </div>
-          </div>
+        {/* Drawer Divider */}
+        <div style={{ borderTop: "1px solid hsl(0 0% 14%)" }} />
+
+        {/* Nav Links */}
+        <div className="flex-1 flex flex-col px-5 md:px-8 py-6 gap-1">
+          {navItems.map((item, i) => {
+            const isActive = activeSection === item.href.substring(1);
+            return (
+              <a
+                key={item.href}
+                href={item.href}
+                onClick={(e) => {
+                  e.preventDefault();
+                  scrollToSection(item.href);
+                }}
+                className={cn(
+                  "py-3 text-base font-medium transition-colors duration-200",
+                  isActive ? "text-accent" : "text-muted-foreground hover:text-foreground"
+                )}
+                style={{ letterSpacing: "-0.5px" }}
+              >
+                {item.label}
+              </a>
+            );
+          })}
         </div>
-      </nav>
+
+        {/* Drawer Footer */}
+        <div className="px-5 md:px-8 py-6" style={{ borderTop: "1px solid hsl(0 0% 14%)" }}>
+          <p className="text-xs" style={{ color: "hsl(0 0% 40%)", letterSpacing: "-0.5px" }}>
+            © {new Date().getFullYear()} Rama Alfin Baehaqi
+          </p>
+        </div>
       </div>
     </>
   );

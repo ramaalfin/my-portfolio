@@ -25,172 +25,60 @@ import { RevealText } from "../ui/AnimatedText";
 import { AnimatePresence, motion } from "motion/react";
 
 const techStacks1 = [
-  {
-    icon: <SiReact className="w-8 h-8" />,
-    color: "text-blue-500",
-    bgColor: "bg-blue-500/10",
-    borderColor: "border-blue-500/20",
-    text: "React.js",
-  },
-  {
-    icon: <SiNextdotjs className="w-8 h-8" />,
-    color: "text-gray-500",
-    bgColor: "bg-gray-500/10",
-    borderColor: "border-gray-500/20",
-    text: "Next.js",
-  },
-  {
-    icon: <SiTypescript className="w-8 h-8" />,
-    color: "text-blue-600",
-    bgColor: "bg-blue-600/10",
-    borderColor: "border-blue-600/20",
-    text: "TypeScript",
-  },
-  {
-    icon: <SiJavascript className="w-8 h-8" />,
-    color: "text-yellow-500",
-    bgColor: "bg-yellow-500/10",
-    borderColor: "border-yellow-500/20",
-    text: "JavaScript",
-  },
-  {
-    icon: <SiTailwindcss className="w-8 h-8" />,
-    color: "text-teal-500",
-    bgColor: "bg-teal-500/10",
-    borderColor: "border-teal-500/20",
-    text: "Tailwind CSS",
-  },
-  {
-    icon: <SiHtml5 className="w-8 h-8" />,
-    color: "text-orange-500",
-    bgColor: "bg-orange-500/10",
-    borderColor: "border-orange-500/20",
-    text: "HTML5",
-  },
-  {
-    icon: <TbBrandReactNative className="w-8 h-8" />,
-    color: "text-blue-400",
-    bgColor: "bg-blue-400/10",
-    borderColor: "border-blue-400/20",
-    text: "React Native",
-  },
+  { icon: <SiReact className="w-7 h-7" />, color: "#61DAFB", text: "React.js" },
+  { icon: <SiNextdotjs className="w-7 h-7" />, color: "#FFFFFF", text: "Next.js" },
+  { icon: <SiTypescript className="w-7 h-7" />, color: "#3178C6", text: "TypeScript" },
+  { icon: <SiJavascript className="w-7 h-7" />, color: "#F7DF1E", text: "JavaScript" },
+  { icon: <SiTailwindcss className="w-7 h-7" />, color: "#06B6D4", text: "Tailwind CSS" },
+  { icon: <SiHtml5 className="w-7 h-7" />, color: "#E34F26", text: "HTML5" },
+  { icon: <TbBrandReactNative className="w-7 h-7" />, color: "#61DAFB", text: "React Native" },
 ];
 
 const techStacks2 = [
-  {
-    icon: <SiExpo className="w-8 h-8" />,
-    color: "text-gray-500",
-    bgColor: "bg-gray-500/10",
-    borderColor: "border-gray-500/20",
-    text: "Expo",
-  },
-  {
-    icon: <SiNodedotjs className="w-8 h-8" />,
-    color: "text-green-600",
-    bgColor: "bg-green-600/10",
-    borderColor: "border-green-600/20",
-    text: "Node.js",
-  },
-  {
-    icon: <SiExpress className="w-8 h-8" />,
-    color: "text-gray-400",
-    bgColor: "bg-gray-400/10",
-    borderColor: "border-gray-400/20",
-    text: "Express.js",
-  },
-  {
-    icon: <SiLaravel className="w-8 h-8" />,
-    color: "text-red-500",
-    bgColor: "bg-red-500/10",
-    borderColor: "border-red-500/20",
-    text: "Laravel",
-  },
-  {
-    icon: <SiPhp className="w-8 h-8" />,
-    color: "text-purple-500",
-    bgColor: "bg-purple-500/10",
-    borderColor: "border-purple-500/20",
-    text: "PHP",
-  },
-  {
-    icon: <SiMongodb className="w-8 h-8" />,
-    color: "text-green-500",
-    bgColor: "bg-green-500/10",
-    borderColor: "border-green-500/20",
-    text: "MongoDB",
-  },
-  {
-    icon: <SiPostgresql className="w-8 h-8" />,
-    color: "text-blue-400",
-    bgColor: "bg-blue-400/10",
-    borderColor: "border-blue-400/20",
-    text: "PostgreSQL",
-  },
+  { icon: <SiExpo className="w-7 h-7" />, color: "#FFFFFF", text: "Expo" },
+  { icon: <SiNodedotjs className="w-7 h-7" />, color: "#339933", text: "Node.js" },
+  { icon: <SiExpress className="w-7 h-7" />, color: "#FFFFFF", text: "Express.js" },
+  { icon: <SiLaravel className="w-7 h-7" />, color: "#FF2D20", text: "Laravel" },
+  { icon: <SiPhp className="w-7 h-7" />, color: "#777BB4", text: "PHP" },
+  { icon: <SiMongodb className="w-7 h-7" />, color: "#47A248", text: "MongoDB" },
+  { icon: <SiPostgresql className="w-7 h-7" />, color: "#4169E1", text: "PostgreSQL" },
 ];
 
 const techStacks3 = [
-  {
-    icon: <SiMysql className="w-8 h-8" />,
-    color: "text-blue-600",
-    bgColor: "bg-blue-600/10",
-    borderColor: "border-blue-600/20",
-    text: "MySQL",
-  },
-  {
-    icon: <SiRedux className="w-8 h-8" />,
-    color: "text-purple-500",
-    bgColor: "bg-purple-500/10",
-    borderColor: "border-purple-500/20",
-    text: "Redux",
-  },
+  { icon: <SiMysql className="w-7 h-7" />, color: "#4479A1", text: "MySQL" },
+  { icon: <SiRedux className="w-7 h-7" />, color: "#764ABC", text: "Redux" },
   {
     icon: (
       <Image
         src="/assets/icons/zustand.svg"
-        width={35}
-        height={35}
+        width={30}
+        height={30}
         alt="zustand-icon"
         loading="lazy"
         priority={false}
         quality={85}
       />
     ),
-    color: "text-orange-500",
-    bgColor: "bg-orange-500/10",
-    borderColor: "border-orange-500/20",
+    color: "#F97316",
     text: "Zustand",
   },
   {
     icon: (
       <Image
         src="/assets/icons/React-Query.svg"
-        width={35}
-        height={35}
+        width={30}
+        height={30}
         alt="React-Query-icon"
         loading="lazy"
         priority={false}
         quality={85}
       />
     ),
-    color: "text-blue-500",
-    bgColor: "bg-blue-500/10",
-    borderColor: "border-blue-500/20",
+    color: "#EF4444",
     text: "TanStack Query",
   },
-  {
-    icon: <SiGit className="w-8 h-8" />,
-    color: "text-orange-600",
-    bgColor: "bg-orange-600/10",
-    borderColor: "border-orange-600/20",
-    text: "Git",
-  },
-  {
-    icon: <VscCode className="w-8 h-8" />,
-    color: "text-blue-500",
-    bgColor: "bg-blue-500/10",
-    borderColor: "border-blue-500/20",
-    text: "VS Code",
-  },
+  { icon: <SiGit className="w-7 h-7" />, color: "#F05032", text: "Git" },
+  { icon: <VscCode className="w-7 h-7" />, color: "#007ACC", text: "VS Code" },
 ];
 
 const MarqueeItem = ({ tech, index }: any) => {
@@ -204,23 +92,16 @@ const MarqueeItem = ({ tech, index }: any) => {
     >
       <div className="relative">
         <motion.div
-          className={`
-          w-14 h-14 md:w-20 md:h-20 rounded-full 
-          flex items-center justify-center mb-3
-          ${tech.bgColor} border ${tech.borderColor} 
-          group-hover:scale-110 transition-transform duration-300
-        `}
-          animate={{
-            scale: isHovered ? 1.1 : 1,
+          className="w-14 h-14 md:w-18 md:h-18 rounded-lg flex items-center justify-center mb-3 transition-transform duration-300"
+          style={{
+            background: isHovered ? `${tech.color}15` : "hsl(0 0% 10%)",
+            border: `1px solid ${isHovered ? `${tech.color}30` : "hsl(0 0% 18%)"}`,
           }}
-          transition={{
-            type: "spring",
-            stiffness: 300,
-            damping: 20,
-          }}
+          animate={{ scale: isHovered ? 1.1 : 1 }}
+          transition={{ type: "spring", stiffness: 300, damping: 20 }}
         >
           <motion.div
-            className={tech.color}
+            style={{ color: tech.color }}
             animate={{
               scale: isHovered ? 0 : 1,
               opacity: isHovered ? 0 : 1,
@@ -230,7 +111,6 @@ const MarqueeItem = ({ tech, index }: any) => {
             {tech.icon}
           </motion.div>
 
-          {/* Hover Text Overlay */}
           <AnimatePresence>
             {isHovered && (
               <motion.div
@@ -240,10 +120,8 @@ const MarqueeItem = ({ tech, index }: any) => {
                 transition={{ duration: 0.2 }}
               >
                 <motion.h3
-                  className="font-semibold text-sm text-center leading-tight"
-                  style={{
-                    color: tech.color.replace("text-", "").split("/")[0],
-                  }}
+                  className="font-medium text-xs text-center leading-tight"
+                  style={{ color: tech.color }}
                   initial={{ scale: 0.8 }}
                   animate={{ scale: 1 }}
                   transition={{ delay: 0.1 }}
@@ -254,34 +132,6 @@ const MarqueeItem = ({ tech, index }: any) => {
             )}
           </AnimatePresence>
         </motion.div>
-
-        <motion.div
-          className="absolute inset-0 rounded-full"
-          animate={{
-            boxShadow: isHovered
-              ? `0 0 20px 5px ${
-                  tech.color.replace("text-", "").split("/")[0]
-                }/30`
-              : "none",
-          }}
-          transition={{ duration: 0.3 }}
-        />
-
-        {isHovered && (
-          <motion.div
-            className="absolute inset-0 rounded-full border-2"
-            style={{
-              borderColor: tech.color.replace("text-", "").split("/")[0],
-            }}
-            initial={{ scale: 0.8, opacity: 0.8 }}
-            animate={{ scale: 1.2, opacity: 0 }}
-            transition={{
-              duration: 1,
-              repeat: Infinity,
-              repeatType: "loop",
-            }}
-          />
-        )}
       </div>
     </div>
   );
@@ -293,24 +143,30 @@ export const TechStackSection2 = () => {
   return (
     <section
       id="tech"
-      className="relative py-20 lg:py-32 bg-gradient-to-b from-white to-gray-50/30 overflow-hidden dark:from-black dark:to-gray-900/30"
+      className="relative py-20 lg:py-section overflow-hidden"
+      style={{ background: "hsl(0 0% 7%)" }}
       ref={container}
     >
-      {/* Section Header */}
-      <div className="container px-4 mx-auto mb-16 lg:mb-24 text-center relative z-10">
+      <div className="container px-5 mx-auto mb-16 lg:mb-24 text-center relative z-10">
         <div className="text-center mb-16">
           <RevealText>
-            <span className="text-sm font-medium text-primary uppercase tracking-widest">
+            <span
+              className="text-sm font-medium uppercase"
+              style={{ color: "hsl(276 100% 82%)", letterSpacing: "-0.5px" }}
+            >
               Tech Stack
             </span>
           </RevealText>
           <RevealText delay={100}>
-            <h2 className="font-serif text-4xl md:text-5xl lg:text-6xl mt-4 mb-6">
+            <h2
+              className="text-4xl md:text-5xl lg:text-[55px] font-medium mt-4 mb-6"
+              style={{ letterSpacing: "-2px", lineHeight: 1 }}
+            >
               Technologies I Work With
             </h2>
           </RevealText>
           <RevealText delay={200}>
-            <p className="text-muted-foreground max-w-2xl mx-auto">
+            <p className="max-w-2xl mx-auto" style={{ color: "hsl(0 0% 64%)" }}>
               A showcase of the tools and technologies that power my projects
             </p>
           </RevealText>
@@ -320,7 +176,7 @@ export const TechStackSection2 = () => {
         </div>
       </div>
 
-      <div className="flex flex-col space-y-8">
+      <div className="flex flex-col space-y-6">
         <SimpleMarquee
           className="w-full"
           baseVelocity={-6}

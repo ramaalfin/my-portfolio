@@ -1,4 +1,4 @@
-import { Heart, ArrowUp } from "lucide-react";
+import { ArrowUp } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 export const Footer = () => {
@@ -7,35 +7,39 @@ export const Footer = () => {
   };
 
   return (
-    <footer className="py-8 border-t border-border/50">
-      <div className="container px-4 lg:px-8">
+    <footer
+      className="py-8"
+      style={{
+        background: "hsl(0 0% 10%)",
+        borderTop: "1px solid hsl(0 0% 18%)",
+      }}
+    >
+      <div className="container px-5 lg:px-8">
         <div className="flex flex-col md:flex-row items-center justify-between gap-6">
-          {/* Logo & Copyright */}
+          {/* Logo */}
           <div className="text-center md:text-left">
-            <a href="#hero" className="font-serif text-2xl inline-block mb-2">
-              <span className="gradient-text">R</span>
-              <span className="text-foreground">ama</span>
+            <a href="#hero" className="text-xl inline-block font-medium" style={{ letterSpacing: "-1px" }}>
+              <span className="text-accent">R</span>
+              <span style={{ color: "hsl(0 0% 100%)" }}>ama</span>
             </a>
           </div>
 
-          {/* Built with */}
-          <div className="flex items-center gap-1 text-sm text-muted-foreground">
-            <p className="text-sm text-muted-foreground">
-              © {new Date().getFullYear()} Rama Alfin Baehaqi. All rights
-              reserved.
-            </p>
-          </div>
+          {/* Copyright */}
+          <p className="text-sm" style={{ color: "hsl(0 0% 56%)", letterSpacing: "-0.5px" }}>
+            © {new Date().getFullYear()} Rama Alfin Baehaqi. All rights reserved.
+          </p>
 
           {/* Back to Top */}
           <button
             onClick={scrollToTop}
             className={cn(
-              "p-3 rounded-full bg-muted/50 hover:bg-muted transition-all duration-300",
-              "hover:scale-110 hover:shadow-lg"
+              "p-3 rounded-md transition-all duration-300",
+              "hover:scale-110"
             )}
+            style={{ background: "hsl(0 0% 7%)" }}
             aria-label="Back to top"
           >
-            <ArrowUp className="w-5 h-5" />
+            <ArrowUp className="w-4 h-4" style={{ color: "hsl(0 0% 64%)" }} />
           </button>
         </div>
       </div>

@@ -8,7 +8,6 @@ import { gsap } from "gsap";
 import { Flip } from "gsap/Flip";
 import { flushSync } from "react-dom";
 
-// Register Flip plugin sekali di module level
 gsap.registerPlugin(Flip);
 
 const categories = ["All", "Web", "Mobile"];
@@ -42,31 +41,20 @@ export const ProjectsSection = () => {
     const grid = gridRef.current;
     const cards = grid.querySelectorAll<HTMLElement>(".project-card");
 
-    // 1. Capture posisi semua card SEBELUM React re-render
     const state = Flip.getState(cards);
-
-    // 2. Tambah class flip-animating — nonaktifkan CSS transform transition
-    //    agar tidak konflik dengan GSAP selama animasi berlangsung
     cards.forEach((card) => card.classList.add("flip-animating"));
-
-    // 3. Lock tinggi grid sebelum flushSync agar container tidak collapse
-    //    saat card yang keluar di-set absolute oleh Flip
     grid.style.minHeight = `${grid.offsetHeight}px`;
 
-    // 4. flushSync — paksa React update DOM secara synchronous
-    //    agar Flip bisa membandingkan posisi lama vs baru dalam satu frame
     flushSync(() => {
       setActiveFilter(category);
     });
 
-    // 5. Animasikan dari posisi lama ke posisi baru
     Flip.from(state, {
       duration: 0.6,
       ease: "power2.inOut",
       stagger: 0.05,
       absolute: true,
       onEnter: (elements) => {
-        // Card baru yang muncul — fade + scale in
         gsap.fromTo(
           elements,
           { opacity: 0, scale: 0.85 },
@@ -74,7 +62,6 @@ export const ProjectsSection = () => {
         );
       },
       onLeave: (elements) => {
-        // Card yang hilang — fade + scale out
         gsap.to(elements, {
           opacity: 0,
           scale: 0.85,
@@ -83,9 +70,6 @@ export const ProjectsSection = () => {
         });
       },
       onComplete: () => {
-        // 6. Reset setelah animasi selesai:
-        //    - hapus flip-animating agar hover transform kembali smooth
-        //    - reset minHeight agar grid menyesuaikan tinggi natural
         grid.querySelectorAll<HTMLElement>(".project-card").forEach((card) =>
           card.classList.remove("flip-animating")
         );
@@ -103,24 +87,31 @@ export const ProjectsSection = () => {
     <section
       id="projects"
       ref={sectionRef}
-      className="py-24 lg:py-32 bg-cream/30"
+      className="py-section lg:py-band"
+      style={{ background: "hsl(0 0% 4%)" }}
     >
-      <div className="container px-4 lg:px-8">
+      <div className="container px-5 lg:px-8">
         {/* Section Header */}
         <div className="text-center mb-16">
           <RevealText>
-            <span className="text-sm font-medium text-primary uppercase tracking-widest">
+            <span
+              className="text-sm font-medium uppercase"
+              style={{ color: "hsl(276 100% 82%)", letterSpacing: "-0.5px" }}
+            >
               Portfolio
             </span>
           </RevealText>
           <RevealText delay={100}>
-            <h2 className="font-serif text-4xl md:text-5xl lg:text-6xl mt-4 mb-6 dark:text-muted-foreground">
+            <h2
+              className="text-4xl md:text-5xl lg:text-[55px] font-medium mt-4 mb-6"
+              style={{ letterSpacing: "-2px", lineHeight: 1 }}
+            >
               Featured Projects
             </h2>
           </RevealText>
           <RevealText delay={200}>
-            <p className="text-muted-foreground max-w-2xl mx-auto">
-              A selection of projects I've worked on, showcasing my expertise in
+            <p className="max-w-2xl mx-auto" style={{ color: "hsl(0 0% 64%)" }}>
+              A selection of projects I&apos;ve worked on, showcasing my expertise in
               web and mobile development
             </p>
           </RevealText>
@@ -141,11 +132,18 @@ export const ProjectsSection = () => {
               key={category}
               onClick={() => handleFilter(category)}
               className={cn(
-                "px-5 py-2.5 rounded-full text-sm font-medium transition-all duration-300",
+                "px-5 py-2 rounded-full text-sm font-medium transition-all duration-300",
                 activeFilter === category
-                  ? "bg-primary text-primary-foreground shadow-lg"
-                  : "bg-muted/50 text-muted-foreground hover:bg-muted hover:text-foreground"
+                  ? "text-black"
+                  : "text-muted-foreground hover:text-foreground"
               )}
+              style={{
+                background:
+                  activeFilter === category
+                    ? "hsl(0 0% 91%)"
+                    : "rgba(255, 255, 255, 0.05)",
+                letterSpacing: "-0.5px",
+              }}
             >
               {category}
             </button>
@@ -153,7 +151,7 @@ export const ProjectsSection = () => {
         </div>
 
         {/* Projects Grid */}
-        <div ref={gridRef} className="grid md:grid-cols-2 gap-6 lg:gap-8">
+        <div ref={gridRef} className="grid md:grid-cols-2 gap-5 lg:gap-6">
           {filteredProjects.map((project, index) => (
             <Link
               key={project.id}
@@ -170,10 +168,8 @@ export const ProjectsSection = () => {
                       transitionDelay: `${index * 100}ms`,
                     }
                   : {
-                      // Matikan hanya opacity & transform agar tidak konflik GSAP Flip
-                      // tapi biarkan box-shadow, color, gap, dll tetap smooth saat hover
                       transition:
-                        "box-shadow var(--transition-base), color var(--transition-base), gap var(--transition-base)",
+                        "box-shadow var(--transition-base), color var(--transition-base)",
                     }
               }
             >
@@ -181,25 +177,43 @@ export const ProjectsSection = () => {
                 {/* Header */}
                 <div className="flex items-start justify-between gap-4 mb-4">
                   <div>
-                    <span className="text-xs font-medium text-primary uppercase tracking-wider">
+                    <span
+                      className="text-xs font-medium uppercase"
+                      style={{ color: "hsl(276 100% 82%)", letterSpacing: "-0.5px" }}
+                    >
                       {project.category}
                     </span>
-                    <h3 className="font-serif text-xl lg:text-2xl mt-1 group-hover:text-primary transition-colors">
+                    <h3
+                      className="text-lg lg:text-xl mt-1 transition-colors"
+                      style={{
+                        color: "hsl(0 0% 100%)",
+                        letterSpacing: "-0.5px",
+                      }}
+                    >
                       {project.title}
                     </h3>
-                    <p className="text-sm text-muted-foreground mt-1">
+                    <p className="text-sm mt-1" style={{ color: "hsl(0 0% 56%)" }}>
                       {project.company} • {project.period}
                     </p>
                   </div>
                   {project.featured && (
-                    <span className="shrink-0 px-3 py-1 text-xs font-medium rounded-full bg-sunset/10 text-sunset">
+                    <span
+                      className="shrink-0 px-3 py-1 text-xs font-medium rounded-full"
+                      style={{
+                        background: "hsl(78 70% 65% / 0.1)",
+                        color: "hsl(78 70% 65%)",
+                      }}
+                    >
                       Featured
                     </span>
                   )}
                 </div>
 
                 {/* Description */}
-                <p className="text-muted-foreground text-sm leading-relaxed mb-4">
+                <p
+                  className="text-sm leading-relaxed mb-4"
+                  style={{ color: "hsl(0 0% 56%)" }}
+                >
                   {project.description}
                 </p>
 
@@ -208,9 +222,13 @@ export const ProjectsSection = () => {
                   {project.highlights.slice(0, 3).map((highlight, i) => (
                     <li
                       key={i}
-                      className="flex items-start gap-2 text-sm text-muted-foreground"
+                      className="flex items-start gap-2 text-sm"
+                      style={{ color: "hsl(0 0% 56%)" }}
                     >
-                      <ChevronRight className="w-4 h-4 text-primary shrink-0 mt-0.5" />
+                      <ChevronRight
+                        className="w-4 h-4 shrink-0 mt-0.5"
+                        style={{ color: "hsl(276 100% 82%)" }}
+                      />
                       <span>{highlight}</span>
                     </li>
                   ))}
@@ -221,21 +239,37 @@ export const ProjectsSection = () => {
                   {project.tech.slice(0, 6).map((tech) => (
                     <span
                       key={tech}
-                      className="px-3 py-1 text-xs font-medium rounded-full bg-muted text-muted-foreground"
+                      className="px-3 py-1 text-xs font-medium rounded-full"
+                      style={{
+                        background: "rgba(255, 255, 255, 0.05)",
+                        color: "hsl(0 0% 56%)",
+                      }}
                     >
                       {tech}
                     </span>
                   ))}
                   {project.tech.length > 6 && (
-                    <span className="px-3 py-1 text-xs font-medium rounded-full bg-muted text-muted-foreground">
+                    <span
+                      className="px-3 py-1 text-xs font-medium rounded-full"
+                      style={{
+                        background: "rgba(255, 255, 255, 0.05)",
+                        color: "hsl(0 0% 56%)",
+                      }}
+                    >
                       +{project.tech.length - 6} more
                     </span>
                   )}
                 </div>
 
-                {/* View Details Link */}
-                <div className="mt-auto pt-4 border-t border-border">
-                  <span className="inline-flex items-center gap-2 text-sm font-medium text-primary group-hover:gap-3 transition-all">
+                {/* View Details */}
+                <div
+                  className="mt-auto pt-4"
+                  style={{ borderTop: "1px solid hsl(0 0% 18%)" }}
+                >
+                  <span
+                    className="inline-flex items-center gap-2 text-sm font-medium transition-all"
+                    style={{ color: "hsl(276 100% 82%)" }}
+                  >
                     View Details
                     <ArrowRight className="w-4 h-4" />
                   </span>
