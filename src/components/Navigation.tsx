@@ -151,15 +151,13 @@ export const Navigation = () => {
           style={{ width: `${scrollProgress}%` }}
         />
 
-        <nav
-          className={cn(
-            "transition-all duration-500",
-            isOpen
-              ? "bg-background/90 backdrop-blur-xl"
-              : "bg-transparent"
-          )}
-        >
-          <div className="flex items-center justify-between px-5 md:px-8 py-4 md:py-5">
+        <nav className="px-4 md:px-6 pt-3">
+          <div
+            className={cn(
+              "liquid-glass flex items-center justify-between px-5 md:px-7 py-3 md:py-3.5 transition-all duration-500",
+              isOpen && "liquid-glass-active"
+            )}
+          >
             {/* Logo */}
             <a
               href="#hero"

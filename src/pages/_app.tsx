@@ -48,6 +48,36 @@ export default function MyApp({ Component, pageProps }: AppProps) {
         <Head>
           <meta name="theme-color" content="#0A0A0A" />
         </Head>
+
+        {/* SVG Filters — efek liquid/water distortion */}
+        <svg width="0" height="0" style={{ position: "absolute" }}>
+          <defs>
+            <filter id="liquid-filter">
+              <feTurbulence
+                type="fractalNoise"
+                baseFrequency="0.012 0.025"
+                numOctaves="3"
+                seed="1"
+                result="noise"
+              >
+                <animate
+                  attributeName="baseFrequency"
+                  dur="8s"
+                  values="0.012 0.025;0.016 0.032;0.012 0.025"
+                  repeatCount="indefinite"
+                />
+              </feTurbulence>
+              <feDisplacementMap
+                in="SourceGraphic"
+                in2="noise"
+                scale="18"
+                xChannelSelector="R"
+                yChannelSelector="G"
+              />
+            </filter>
+          </defs>
+        </svg>
+
         <Toaster />
         <Sonner />
 
