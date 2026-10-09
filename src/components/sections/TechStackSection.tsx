@@ -228,9 +228,9 @@ export const TechStackSection = () => {
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 text-center">
             {[
               { label: "Years of Experience", value: "2+" },
-              { label: "Projects Completed", value: "15+" },
+              { label: "Projects Documented", value: "7" },
               { label: "Technologies", value: "20+" },
-              { label: "Happy Clients", value: "10+" },
+              { label: "Companies", value: "4" },
             ].map((stat, index) => (
               <div key={stat.label} className="p-4">
                 <p className="font-serif text-4xl lg:text-5xl gradient-text mb-2">

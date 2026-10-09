@@ -22,67 +22,349 @@ export interface Project {
 
 export const projects: Project[] = [
     {
-        id: "heyhao-platform",
-        title: "HeyHao — Community & Group Management Platform",
-        company: "Personal Project",
-        period: "2026",
+        id: "nms-akses-internet",
+        title: "NMS Akses Internet — National Network Monitoring",
+        company: "PT Bangunindo Teknusa Jaya",
+        period: "May 2026 - Present",
         year: "2026",
         description:
-            "Full-stack community platform with real-time messaging, revenue analytics, and comprehensive group management capabilities.",
+            "Internal monitoring platform for thousands of national internet service sites (VSAT & Fiber) — from site data and SLA onboarding to 24/7 monitoring, incident handling, evaluation, and provider billing. Internal system, not publicly accessible.",
         longDescription:
-            "Built and architected a full-stack community platform end-to-end — a high-performance React 18 dashboard and a robust Node.js/Express.js REST API — supporting complex group management, user interactions, and real-time data synchronization.",
+            "NMS Akses Internet manages the full lifecycle of Indonesia's national internet service sites: site master data, SLA onboarding, real-time monitoring, outage handling, performance evaluation, and provider payments. As the sole frontend contributor I delivered every module across 10 business cycles — 30 modules in total — on a legacy Nuxt 2 codebase while driving the migration to Nuxt 4 with Vue 3 and TypeScript.",
         highlights: [
-            "Real-time messaging with <50ms latency for 1,000+ concurrent connections",
-            "Comprehensive revenue analytics with Chart.js visualization",
-            "JWT authentication with token rotation and refresh mechanisms",
-            "90+ Lighthouse performance scores",
-            "TanStack Query caching reducing query times by ~45%",
+            "30 frontend modules across 10 business cycles / 5 stages",
+            "Real-time monitoring dashboard: Up/Down/Warning · uptime/ping/SQF/traffic",
+            "5-phase Troubleshoot Ticket: detection → investigation → PMU approval → TTR → resolution",
+            "SLA scoring & performance-based billing (Base − Penalty + Bonus)",
         ],
         detailedFeatures: [
             {
-                title: "Real-time Messaging System",
+                title: "Foundation (Cycles 1–2, 9 modules)",
                 description:
-                    "Engineered using Socket.IO with WebSocket connection management, room-based messaging, typing indicators, and online/offline presence tracking.",
-                metrics: "<50ms message latency for 1,000+ concurrent connections",
+                    "Site master import with a simulation mode before production, DKH site master import (PPK contract rights), site relocation, provider/beam/data source managers, and BA Integration with auto-generated PDF templates.",
             },
             {
-                title: "Revenue Analytics Engine",
+                title: "Operations (Cycles 3–5)",
                 description:
-                    "Comprehensive analytics integrated with Chart.js, visualizing monthly revenue trends, VIP group statistics, and transaction history, powered by custom payment processing backend with transaction rollback mechanisms.",
+                    "Real-time monitoring dashboard (Up/Down/Warning with uptime, ping, SQF, traffic), Troubleshoot Ticket across 5 phases with PMU approval, and Preventive Maintenance with dynamic forms and audit trails.",
             },
             {
-                title: "Full-Stack Authentication",
+                title: "Evaluation & Payment (Cycles 6–7)",
                 description:
-                    "Implemented JWT access and refresh tokens, token rotation, and middleware-based route protection, securing all API surfaces and ensuring seamless user session continuity.",
+                    "SLA score calculation, two-way reconciliation with providers, BA Verification (Start → Final), and billing based on Base − Penalty + Bonus with budget utilization.",
+                metrics: "SLA weights: uptime 40% · ping 20% · SQF 20% · traffic 10% · DHCP 10%",
             },
             {
-                title: "Performance Optimization",
+                title: "Support (Cycles 8–10, 12+ modules)",
                 description:
-                    "System-wide performance optimization implementing TanStack Query caching and code splitting on frontend, alongside strategic database indexing and connection pooling with Prisma ORM.",
-                metrics: "~45% reduction in query times, 90+ Lighthouse scores",
+                    "Six analytics reports, 5-level user management with read-only BPK auditors, and the NMT document management system for archiving.",
             },
             {
-                title: "Responsive UI Component Library",
+                title: "Authorization",
                 description:
-                    "Developed with TailwindCSS and React Hook Form, implementing mobile-first design patterns, loading states, and error boundaries for consistent cross-device experience.",
+                    "Approval acts as the gate that moves work from 'done' to 'officially recognized', with RBAC across 5 user levels and per-site-group access rules.",
             },
         ],
         tech: [
-            "React 18",
+            "Nuxt 4",
+            "Vue 3",
             "TypeScript",
-            "Vite",
-            "TailwindCSS",
+            "Vuetify",
+            "Tailwind CSS",
+            "Pinia",
+            "Nuxt 2 (legacy)",
+            "Vue 2",
+        ],
+        category: "Web",
+        featured: true,
+    },
+    {
+        id: "pmt-bht-pms-ai",
+        title: "PMT/BHT PMS AI — BAKTI Site Construction Platform",
+        company: "PT Bangunindo Teknusa Jaya",
+        period: "Aug 2026 - Present",
+        year: "2026",
+        description:
+            "Project management system for building BAKTI internet sites (VSAT & Fiber Optic) across Indonesia — planning through maintenance until On-Air. Internal system, not publicly accessible.",
+        longDescription:
+            "PMT/BHT PMS AI is used by BAKTI, PMO, PMU, vendors, and O&M teams to manage site construction end-to-end. I led the frontend migration from Nuxt 3 to Nuxt 4 with Vue 3 and TypeScript, covering 16 modules organized as one continuous workflow across 5 blocks — frontend only, the backend was untouched.",
+        highlights: [
+            "Migrated frontend Nuxt 3 → Nuxt 4 + Vue 3 + TypeScript",
+            "16 modules in 5 blocks forming a single workflow",
+            "Approval as the key moment: work goes from 'done' to 'officially recognized'",
+            "Site Package access control: PMU sees all, vendors only their own sites",
+        ],
+        detailedFeatures: [
+            {
+                title: "Block A · Planning",
+                description:
+                    "Project Phase (site batches), Contractor (vendor + supervisor), Site Information (sites + coordinates → PMO), and Team management.",
+            },
+            {
+                title: "Block B · Material",
+                description:
+                    "Warehouse stock, Asset (unique codes · BMN), and Site Asset allocation from warehouse to site.",
+            },
+            {
+                title: "Block C · Evidence & Approval",
+                description:
+                    "The heart of the workflow: Form Laporan Integrasi (data + photo + video), Manual Bulk Report, PMU Approval, and NMS Integration. Focus on validated input and reliable uploads.",
+            },
+            {
+                title: "Block D · Monitoring",
+                description:
+                    "PMU Dashboard for the big picture and Vendor Dashboard restricted to each vendor's own sites.",
+            },
+            {
+                title: "Block E · Authorization",
+                description:
+                    "Admin System User, My Profile, Admin User, and Site Package — the access gate in front of every block.",
+            },
+        ],
+        tech: [
+            "Nuxt 4",
+            "Vue 3",
+            "TypeScript",
+            "Tailwind CSS",
+            "Pinia",
+            "Vuetify",
+            "Nuxt 3 (legacy)",
+        ],
+        category: "Web",
+        featured: true,
+    },
+    {
+        id: "fiberzone",
+        title: "Fiberzone — Corporate Fiber Internet Platform",
+        company: "PT Varnion Teknologi Semesta",
+        period: "Jul 2025 - Apr 2026",
+        year: "2025",
+        description:
+            "Corporate fiber internet platform with coverage checking, end-to-end online subscription, client-side OCR onboarding, and payment integration.",
+        longDescription:
+            "Official website of a corporate fiber ISP: package catalog, coverage area check, online subscription and checkout, KTP/NPWP OCR onboarding, blog, and promotions — built with a team of 10+ engineers on GitLab merge-request workflows. I was the top contributor and led the subscription & checkout flow from coverage check to order status.",
+        highlights: [
+            "Top contributor: primary author of 81 of 189 core source modules",
+            "End-to-end subscription flow: coverage → package → order → promo → payment → invoice",
+            "Client-side OCR for KTP/NPWP (Tesseract.js) with form auto-fill",
+            "Next.js 14 → 15 / React 18 → 19 migration with image & bundle optimization",
+        ],
+        detailedFeatures: [
+            {
+                title: "Subscription & Checkout",
+                description:
+                    "Coverage check with Leaflet, package selection, promo engine (BOGO, Rp0 promos) with validation rules, payment integration, invoices, and order status tracking.",
+            },
+            {
+                title: "Client-side OCR Onboarding",
+                description:
+                    "Tesseract.js extracts KTP/NPWP fields automatically with image compression and form auto-fill to speed up customer onboarding.",
+            },
+            {
+                title: "Security",
+                description:
+                    "AES-encrypted access/refresh tokens (CryptoJS), middleware route protection, reCAPTCHA v3, and a complete forgot-password → OTP → reset flow.",
+            },
+            {
+                title: "Resilience & Operations",
+                description:
+                    "30-second timeouts, exponential backoff retries, fail-safe service layer with Indonesian error messages, and a zero-rebuild maintenance mode toggled via environment variable.",
+            },
+            {
+                title: "Performance & Migration",
+                description:
+                    "Led the Next.js 14 → 15 and React 18 → 19 upgrade with AVIF/WebP images, lazy loading, and deferred analytics.",
+            },
+        ],
+        tech: [
+            "Next.js",
+            "React 19",
+            "TypeScript",
+            "Tailwind CSS",
+            "Zustand",
+            "Leaflet",
+            "Tesseract.js",
+            "GSAP",
+            "Framer Motion",
+        ],
+        category: "Web",
+        featured: true,
+        liveUrl: "https://fiberzone.id",
+    },
+    {
+        id: "varnion-bali-company-profile",
+        title: "Varnion Bali — Company Profile Website",
+        company: "PT Varnion Teknologi Semesta",
+        period: "Aug - Sep 2025",
+        year: "2025",
+        description:
+            "Two-page company profile (Home + Product) for an ISP serving hotels & resorts in Bali, with scroll-based animations and a self-hosted brand font.",
+        longDescription:
+            "Static company profile for Varnion's Bali unit, an ISP focused on hospitality clients. Working with a team of 4, I owned the /product page end-to-end — hero, product carousels, activity gallery, hotel testimonials, and location section — plus the reusable layout, SEO metadata, and analytics.",
+        highlights: [
+            "Owned the /product page end-to-end: hero, 3 product carousels, testimonials, location",
+            "Scroll animations with AOS and Framer Motion (whileInView hero sequence)",
+            "Reusable MainLayout + Footer, local SEO metadata, and Google Analytics 4",
+            "Mobile-first variants with animation-safe sliders",
+        ],
+        detailedFeatures: [
+            {
+                title: "Product Page",
+                description:
+                    "Hero banner with separate desktop/mobile variants, product carousel (Keponet, Megalos, Vlepo), activity carousel, testimonial slider with a reusable star-rating component for three premium Bali hotels, and a location section.",
+            },
+            {
+                title: "Animation",
+                description:
+                    "AOS (900ms duration, 80px offset, once) for long sections plus Framer Motion variants triggered with whileInView to orchestrate the hero sequence: container → text → CTA.",
+            },
+            {
+                title: "Layout, SEO & Analytics",
+                description:
+                    "MainLayout (header + children + footer) and a 108-line Footer built from scratch, local SEO metadata, and Google Analytics 4 in the root layout.",
+            },
+            {
+                title: "Self-hosted Brand Font",
+                description:
+                    "Causten font (18 OTF sources + license) served statically from public/ — no third-party requests and no bundling issues.",
+            },
+            {
+                title: "Delivery",
+                description:
+                    "Feature-branch workflow (dev-rama → development → master) with GitLab review and CI deployment via Docker standalone image.",
+            },
+        ],
+        tech: [
+            "Next.js 15",
+            "React 19",
+            "Tailwind CSS v4",
+            "Framer Motion",
+            "AOS",
+            "Swiper",
+            "GitLab CI",
+            "Docker",
+        ],
+        category: "Web",
+        featured: false,
+    },
+    {
+        id: "getjob-hiring-platform",
+        title: "GetJob — Multi-Role Hiring Platform",
+        company: "Personal Project (Freelance)",
+        period: "Oct 2025 - May 2026",
+        year: "2025",
+        description:
+            "Multi-role recruitment platform with 3 separate dashboards (Admin, Employer, Candidate), RBAC at the edge, Kanban ATS, and gesture-based photo capture.",
+        longDescription:
+            "Job marketplace with three distinct dashboards built as the sole frontend contributor, from architecture to accessibility. Runs on Next.js App Router with Edge Middleware RBAC, a schema-driven dynamic application form, and a browser-side computer-vision capture flow.",
+        highlights: [
+            "Sole frontend contributor: 3 dashboards (Admin, Employer, Candidate)",
+            "RBAC in Next.js Edge Middleware: JWT decode, role guards, auto-redirect",
+            "6-stage Kanban ATS with drag-and-drop and optimistic updates",
+            "Gesture-based photo capture with TensorFlow.js + MediaPipe, fully client-side",
+        ],
+        detailedFeatures: [
+            {
+                title: "Edge RBAC",
+                description:
+                    "JWT decoded in Edge Middleware with separate candidate/admin/employer route guards and role-based redirects decided before render.",
+            },
+            {
+                title: "Kanban ATS",
+                description:
+                    "Six-stage drag-and-drop board with optimistic updates, automatic rollback on failure, toasts, and UI latency measured explicitly with performance.mark (target under 100 ms).",
+            },
+            {
+                title: "Passwordless Auth",
+                description:
+                    "Magic link authentication (login, registration, email verification) with silent token refresh through an Axios interceptor, request replay, and a recursion guard.",
+            },
+            {
+                title: "Schema-driven Application Form",
+                description:
+                    "Zod validation schema built at runtime from backend requirement flags (mandatory/optional/off) — no hardcoded forms.",
+            },
+            {
+                title: "Browser Computer Vision",
+                description:
+                    "TensorFlow.js Hand Pose + MediaPipe capture a photo automatically from a 3-finger gesture, entirely in the browser.",
+            },
+            {
+                title: "Accessibility",
+                description:
+                    "WCAG 2.1 AA audit with 7+ findings fixed: ARIA landmarks, control labels, modal focus traps, and keyboard instructions for drag-and-drop.",
+            },
+        ],
+        tech: [
+            "Next.js 14",
+            "TypeScript",
+            "Tailwind CSS",
+            "shadcn / Radix",
             "TanStack Query",
+            "Zustand",
+            "React Hook Form",
+            "Zod",
+            "TensorFlow.js",
+            "MediaPipe",
+            "Vercel",
+        ],
+        category: "Web",
+        featured: true,
+        githubUrl: "https://github.com/ramaalfin/fe-hiring-platform",
+    },
+    {
+        id: "heyhao-web",
+        title: "HeyHao — Paid Community Dashboard (Web)",
+        company: "Personal Project",
+        period: "Feb - Apr 2026",
+        year: "2026",
+        description:
+            "Web dashboard for a paid community platform: free & VIP groups, real-time chat, monetization, payouts, and a separate admin console.",
+        longDescription:
+            "Feature-based React 19 dashboard with a type-safe API layer: 7 feature modules following a consistent api → hooks → pages pattern, real-time chat over Socket.IO, and a monetization flow from discovery to checkout and admin payout approval. Built in a 6-week cycle.",
+        highlights: [
+            "Feature-based architecture: 7 feature modules, 21 pages",
+            "Real-time Socket.IO chat with typed event contract",
+            "Monetization flow: checkout → revenue dashboard → payout approval",
+            "Type-safe API layer: 43 endpoint functions with Zod response validation",
+        ],
+        detailedFeatures: [
+            {
+                title: "Real-time Chat",
+                description:
+                    "Singleton SocketClient with a typed event contract, a pendingRooms queue that fixes the join-before-auth race condition, message deduplication across REST + realtime sources, typing indicator, and presence.",
+            },
+            {
+                title: "Seamless Sessions",
+                description:
+                    "Access/refresh token rotation via Axios response headers, two separate auth boundaries (user/admin) with loader-based route guards, and 401 recovery.",
+            },
+            {
+                title: "Monetization",
+                description:
+                    "Discover → checkout → success flow, monthly revenue dashboard with Chart.js, balance checks, withdrawal requests, and an admin payout console with transfer-proof upload behind its own auth boundary.",
+            },
+            {
+                title: "Type-safe API Layer",
+                description:
+                    "43 endpoint functions across 3 Axios instances with runtime Zod validation of API responses, 32 custom hooks, and consistent error toasts — enforced by strict tsc and ESLint 9 in the build pipeline.",
+            },
+        ],
+        tech: [
+            "React 19",
+            "TypeScript",
+            "Vite 6",
+            "React Router v7",
+            "TanStack Query",
+            "Tailwind CSS v4",
             "Socket.IO Client",
             "Chart.js",
             "React Hook Form",
             "Zod",
-            "Node.js",
-            "Express.js",
-            "Prisma ORM",
         ],
         category: "Web",
         featured: true,
+        githubUrl: "https://github.com/ramaalfin/heyhao-fe",
     },
     {
         id: "heyhao-mobile",
@@ -91,189 +373,55 @@ export const projects: Project[] = [
         period: "2026",
         year: "2026",
         description:
-            "Cross-platform mobile application for iOS and Android with 50+ screens, real-time chat, and comprehensive revenue analytics.",
+            "Cross-platform mobile app (iOS & Android) for paid communities: real-time chat, paid groups, WebView checkout, and a revenue dashboard.",
         longDescription:
-            "Architected a cross-platform mobile application for iOS and Android with 50+ screens and components, implementing feature-based folder structure with clear separation of concerns to support a scalable community and group management platform.",
+            "Sole mobile developer with full ownership from auth to payment. Feature-based React Native app with 9 feature modules and 21 screens in strict TypeScript, a resilient Axios layer with automatic token refresh, and about 99 Jest test cases guarding the auth and state logic.",
         highlights: [
-            "50+ screens with feature-based architecture",
-            "Real-time chat with <50ms message latency",
-            "Revenue analytics dashboard with interactive charts",
-            "~60% reduction in unnecessary API calls",
-            "~40% reduction in runtime errors with TypeScript",
+            "Feature-based React Native app: 9 feature modules, 21 screens",
+            "Resilient Axios layer: auto refresh with queued request replay",
+            "End-to-end paid-group checkout via WebView payment gateway",
+            "~99 Jest test cases covering token refresh, errors, Redux slices",
         ],
         detailedFeatures: [
             {
                 title: "Cross-Platform Architecture",
                 description:
-                    "Architected for iOS and Android with 50+ screens and components, implementing feature-based folder structure with clear separation of concerns.",
+                    "9 feature modules and 21 screens for iOS and Android with clear separation of concerns, in strict TypeScript.",
             },
             {
-                title: "Real-time Chat Integration",
+                title: "Resilient API Layer",
                 description:
-                    "Integrated Socket.IO client with WebSocket connection management, typing indicators, online/offline presence tracking, and message delivery confirmation.",
-                metrics: "<50ms message latency",
+                    "Singleton Axios client per domain with interceptors, automatic 401 refresh, and a request replay queue that prevents a thundering-herd against the auth endpoint.",
             },
             {
-                title: "Revenue Analytics Dashboard",
+                title: "Payment Flow",
                 description:
-                    "Built comprehensive dashboard with react-native-gifted-charts, displaying monthly revenue trends with interactive bar charts, VIP group statistics, and latest member transactions.",
+                    "Full group checkout: transaction API → WebView payment gateway → success/failure redirect detection → receipt, alongside free/paid group CRUD with multipart asset upload.",
             },
             {
-                title: "Efficient State Management",
+                title: "Revenue Dashboard",
                 description:
-                    "Implemented combining Redux Toolkit for global state (auth, app settings) and TanStack Query for server state with automatic caching and background refetching.",
-                metrics: "~60% reduction in unnecessary API calls",
+                    "Monthly revenue bar charts (react-native-gifted-charts), VIP group/member statistics, and payout history with status badges and masked account numbers.",
             },
             {
-                title: "Type-Safe API Integration",
+                title: "Quality",
                 description:
-                    "Engineered with 100% TypeScript coverage and custom hooks (useAuth, useGroup, useChat, useTransaction) for data fetching, automatic JWT token refresh, and request/response interceptors.",
-                metrics: "~40% reduction in runtime errors",
-            },
-            {
-                title: "Custom React Hooks",
-                description:
-                    "Designed for WebSocket events (useSocket, useMessages, useTypingIndicator) with automatic cleanup and reconnection logic, and implemented image caching for optimal performance with large media content.",
+                    "~99 Jest test cases (token refresh with axios-mock-adapter, error handler, Redux slices, persist rehydration), ESLint (airbnb) + Prettier with path aliases synchronized across Babel, TypeScript, and Jest.",
             },
         ],
         tech: [
             "React Native",
             "TypeScript",
             "Redux Toolkit",
-            "TanStack Query",
+            "redux-persist",
             "Socket.IO Client",
             "NativeWind",
             "react-native-gifted-charts",
-            "React Hook Form",
-            "Zod",
+            "Jest",
+            "Axios",
         ],
         category: "Mobile",
         featured: true,
-    },
-    {
-        id: "fiberzone",
-        title: "Fiberzone — Corporate Fiber Internet Platform",
-        company: "PT Varnion Teknologi Semesta",
-        period: "November 2025",
-        year: "2025",
-        description:
-            "Corporate fiber internet platform with SSR, payment integration, and promotional pricing engine.",
-        longDescription:
-            "Official website for fiber internet service provider featuring unlimited packages without FUP, with fast and stable connections. Implemented SSR for optimal performance and integrated payment gateway.",
-        highlights: [
-            "Lighthouse performance score 95+ (up from 72)",
-            "~35% reduction in initial page load time",
-            "BOGO promotional pricing engine with validation",
-            "Full authentication flows with JWT",
-            "Feature-based architecture with global state separation",
-        ],
-        detailedFeatures: [
-            {
-                title: "Performance Optimization",
-                description:
-                    "Lifted Lighthouse performance score through SSR, image optimization, and critical-path CSS inlining.",
-                metrics: "95+ Lighthouse score, ~35% faster load time",
-            },
-            {
-                title: "Promotional Pricing Engine",
-                description:
-                    "Engineered BOGO promotional pricing with configurable validation rules, handling edge-case discount stacking, expiry logic and implemented dynamic pricing calculation with real-time feedback.",
-            },
-            {
-                title: "Authentication System",
-                description:
-                    "Built full authentication flows (login, forgot password, reset password) with JWT token handling and middleware-based route protection.",
-            },
-            {
-                title: "Code Architecture",
-                description:
-                    "Structured the codebase with feature-based architecture and global state separation for maintainability and scalability.",
-            },
-            {
-                title: "SEO Optimization",
-                description:
-                    "Integrated structured data and Open Graph metadata for SEO, improving page indexability for target service-area keywords.",
-            },
-        ],
-        tech: [
-            "Next.js (Pages Router)",
-            "TypeScript",
-            "Tailwind CSS",
-            "Zustand",
-            "REST API",
-            "SSR",
-            "IForte Pay",
-        ],
-        category: "Web",
-        featured: true,
-        liveUrl: "https://fiberzone.id",
-    },
-    {
-        id: "hiring-management",
-        title: "Hiring Management System — Multi-Role Recruitment Platform",
-        company: "Personal Project",
-        period: "November 2025",
-        year: "2025",
-        description:
-            "Multi-role recruitment platform with dynamic form builder, magic link authentication, and gesture-based photo capture.",
-        longDescription:
-            "Comprehensive hiring management system with dynamic form rendering, multiple authentication methods, and AI-powered features for modern recruitment workflows.",
-        highlights: [
-            "Dynamic form builder from backend-driven JSON schema",
-            "JWT + Magic link passwordless authentication",
-            "Multi-role access with RBAC and IDOR protection",
-            "99.9% email delivery rate with Resend",
-            "10x faster queries (500ms → 50ms)",
-            "Gesture-based photo capture with TensorFlow.js",
-        ],
-        detailedFeatures: [
-            {
-                title: "Dynamic Form Builder",
-                description:
-                    "Architected rendering complex application forms from backend-driven JSON schema, eliminating hardcoded field definitions and enabling rapid customization.",
-            },
-            {
-                title: "Advanced Authentication",
-                description:
-                    "Implemented JWT authentication with refresh token cycle and Axios interceptor pattern, plus magic link passwordless authentication with one-time verification codes and 30-minute expiry.",
-            },
-            {
-                title: "Database Design & Security",
-                description:
-                    "Designed normalized PostgreSQL schema with Prisma ORM for multi-role access (Admin/Candidate), implementing middleware-enforced RBAC, IDOR protection, and email verification requirements.",
-            },
-            {
-                title: "Email Service Integration",
-                description:
-                    "Integrated Resend email service with automatic provider switching, solving SMTP port blocking issues.",
-                metrics: "99.9% delivery rate",
-            },
-            {
-                title: "Database Performance",
-                description:
-                    "Optimized with strategic indexing for faster query execution.",
-                metrics: "10x faster queries (500ms → 50ms average response time)",
-            },
-            {
-                title: "AI-Powered Photo Capture",
-                description:
-                    "Built gesture-based photo capture using TensorFlow.js Hand Pose + MediaPipe for touchless document scanning, improving accessibility.",
-            },
-        ],
-        tech: [
-            "Next.js",
-            "TypeScript",
-            "Zustand",
-            "PostgreSQL",
-            "Prisma ORM",
-            "JWT",
-            "Resend",
-            "Cloudinary",
-            "TensorFlow.js",
-            "MediaPipe",
-        ],
-        category: "Web",
-        featured: true,
-        liveUrl: "https://squeezy-hiring.netlify.app",
+        githubUrl: "https://github.com/ramaalfin/heyhao-app",
     },
 ];

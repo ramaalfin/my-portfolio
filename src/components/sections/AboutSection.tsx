@@ -113,9 +113,9 @@ export const AboutSection = () => {
           production-grade web and mobile applications at scale. Specialized in
           React.js, Next.js, and TypeScript, with a strong focus on rendering
           strategies, Core Web Vitals optimization, and scalable component
-          architecture. Proven ability to improve Lighthouse scores to 95+,
-          reduce load times by ~35%, and ship end-to-end features including
-          real-time systems and fullstack integrations.
+          architecture. Proven ability to ship end-to-end features including
+          real-time systems, online subscription and payment flows, OCR-based
+          onboarding, and accessibility-compliant interfaces.
         </p>
       </div>
     </section>
